@@ -45,6 +45,24 @@ defmodule EspacoNeuroWeb.Router do
     end
   end
 
+  ## Admin routes (protected)
+
+  scope "/admin", EspacoNeuroWeb.Admin do
+    pipe_through [:browser, :require_authenticated_user]
+
+    live_session :admin do
+      live "/servicos", ServiceLive.Index, :index
+      live "/servicos/new", ServiceLive.Form, :new
+      live "/servicos/:id", ServiceLive.Show, :show
+      live "/servicos/:id/edit", ServiceLive.Form, :edit
+
+      live "/profissionais", ProfessionalLive.Index, :index
+      live "/profissionais/new", ProfessionalLive.Form, :new
+      live "/profissionais/:id", ProfessionalLive.Show, :show
+      live "/profissionais/:id/edit", ProfessionalLive.Form, :edit
+    end
+  end
+
   ## Authentication routes
 
   scope "/", EspacoNeuroWeb do
