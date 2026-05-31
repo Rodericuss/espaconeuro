@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Paleta Espaço Neuro</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#212951; --teal:#74C5C6; --off:#F3F0F6;
+    --navy-950:#161B38; --navy-800:#26305E; --navy-700:#323E7B; --navy-300:#A1AAD9;
+    --neutral-200:#D6D4DF; --neutral-400:#8F8DA0; --neutral-600:#514F60;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    background:var(--off);
+    color:var(--navy);
+    font-family:'Inter',sans-serif;
+    -webkit-font-smoothing:antialiased;
+    padding:0 0 80px;
+  }
+  .wrap{max-width:1120px;margin:0 auto;padding:0 32px;}
+
+  /* Header / brand */
+  header{
+    background:var(--navy);
+    padding:64px 0 72px;
+    margin-bottom:56px;
+  }
+  header .wrap{display:flex;align-items:center;gap:48px;flex-wrap:wrap;}
+  .logo-chip{
+    width:184px;height:184px;border-radius:28px;flex:0 0 auto;
+    background:var(--navy) url('assets/logo-espaco-neuro.png') center/cover no-repeat;
+    box-shadow:0 18px 48px -18px rgba(0,0,0,.55);
+    border:1px solid var(--navy-700);
+  }
+  .head-text h1{
+    font-family:'Poppins',sans-serif;font-weight:600;color:var(--off);
+    font-size:42px;letter-spacing:-.01em;line-height:1.05;
+  }
+  .head-text h1 b{color:var(--teal);font-weight:600;}
+  .head-text p{color:var(--navy-300);margin-top:14px;font-size:17px;max-width:46ch;line-height:1.5;}
+  .brand-row{display:flex;gap:14px;margin-top:28px;flex-wrap:wrap;}
+  .brand-pill{
+    display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.06);
+    border:1px solid rgba(255,255,255,.1);border-radius:999px;padding:8px 14px 8px 8px;
+  }
+  .brand-pill .dot{width:26px;height:26px;border-radius:50%;border:1px solid rgba(255,255,255,.18);}
+  .brand-pill span{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--off);}
+  .brand-pill small{color:var(--navy-300);font-size:12px;font-family:'Inter',sans-serif;}
+
+  /* Sections */
+  section{margin-bottom:56px;}
+  .sec-head{display:flex;align-items:baseline;gap:14px;margin-bottom:22px;}
+  .sec-head h2{font-family:'Poppins',sans-serif;font-weight:600;font-size:22px;letter-spacing:-.01em;}
+  .sec-head .line{flex:1;height:1px;background:var(--neutral-200);}
+  .sec-head .tag{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--neutral-400);}
+
+  /* Scale rows */
+  .scale{display:grid;grid-template-columns:repeat(11,1fr);border-radius:16px;overflow:hidden;box-shadow:0 8px 24px -12px rgba(33,41,81,.22);}
+  .scale.neu{grid-template-columns:repeat(10,1fr);}
+  .swatch{aspect-ratio:1/1.25;display:flex;flex-direction:column;justify-content:flex-end;padding:10px;cursor:pointer;position:relative;transition:transform .15s;}
+  .swatch:hover{transform:translateY(-4px);z-index:2;box-shadow:0 12px 28px -10px rgba(33,41,81,.4);}
+  .swatch .k{font-family:'Inter',sans-serif;font-weight:600;font-size:13px;}
+  .swatch .v{font-family:'JetBrains Mono',monospace;font-size:10.5px;opacity:.78;margin-top:2px;text-transform:uppercase;}
+  .swatch.brand-mark::after{content:'MARCA';position:absolute;top:9px;left:9px;font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.08em;background:rgba(255,255,255,.92);color:var(--navy);padding:2px 6px;border-radius:5px;font-weight:600;}
+
+  /* Semantic + usage */
+  .grid3{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;}
+  .sem{border-radius:14px;overflow:hidden;border:1px solid var(--neutral-200);background:#fff;}
+  .sem .cap{height:88px;display:flex;align-items:center;justify-content:center;color:#fff;font-family:'Poppins',sans-serif;font-weight:600;font-size:15px;}
+  .sem .meta{padding:12px 14px;}
+  .sem .meta .nm{font-weight:600;font-size:14px;}
+  .sem .meta .hx{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--neutral-600);margin-top:3px;}
+
+  /* Usage examples */
+  .examples{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+  .ex{border-radius:18px;overflow:hidden;border:1px solid var(--neutral-200);}
+  .ex .label{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--neutral-400);padding:10px 14px;background:#fff;border-bottom:1px solid var(--neutral-200);}
+  .demo-nav{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;}
+  .demo-nav .bword{font-family:'Poppins',sans-serif;font-weight:600;font-size:18px;}
+  .demo-nav nav{display:flex;gap:18px;align-items:center;font-size:13px;}
+  .btn{border:none;border-radius:10px;padding:9px 16px;font-family:'Inter',sans-serif;font-weight:600;font-size:13px;cursor:pointer;}
+  .demo-hero{padding:34px 28px 38px;background:var(--navy);}
+  .demo-hero h3{font-family:'Poppins',sans-serif;color:var(--off);font-size:26px;font-weight:600;line-height:1.12;letter-spacing:-.01em;}
+  .demo-hero h3 b{color:var(--teal);font-weight:600;}
+  .demo-hero p{color:var(--navy-300);font-size:14px;margin:12px 0 22px;line-height:1.5;max-width:34ch;}
+  .demo-btns{display:flex;gap:12px;}
+
+  .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(140%);background:var(--navy);color:var(--off);padding:12px 22px;border-radius:12px;font-family:'JetBrains Mono',monospace;font-size:13px;transition:transform .28s cubic-bezier(.2,.8,.2,1);box-shadow:0 12px 30px -8px rgba(0,0,0,.4);z-index:50;}
+  .toast.show{transform:translateX(-50%) translateY(0);}
+  @media(max-width:760px){.grid3{grid-template-columns:repeat(2,1fr);}.examples{grid-template-columns:1fr;}.scale,.scale.neu{grid-template-columns:repeat(6,1fr);}.head-text h1{font-size:32px;}}
+</style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <div class="logo-chip" aria-label="Logo Espaço Neuro"></div>
+      <div class="head-text">
+        <h1>Paleta <b>Espaço Neuro</b></h1>
+        <p>Sistema de cores derivado da logo — pronto para construir navbar, hero, footer e o restante do webapp. Clique em qualquer cor para copiar.</p>
+        <div class="brand-row">
+          <div class="brand-pill"><span class="dot" style="background:#212951"></span><span>#212951</span><small>navy</small></div>
+          <div class="brand-pill"><span class="dot" style="background:#74C5C6"></span><span>#74C5C6</span><small>teal</small></div>
+          <div class="brand-pill"><span class="dot" style="background:#F3F0F6"></span><span>#F3F0F6</span><small>off-white</small></div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="wrap">
+    <section>
+      <div class="sec-head"><h2>Primary — Navy</h2><span class="line"></span><span class="tag">--navy-50 → 950</span></div>
+      <div class="scale" id="navy"></div>
+    </section>
+
+    <section>
+      <div class="sec-head"><h2>Secondary — Teal</h2><span class="line"></span><span class="tag">--teal-50 → 950</span></div>
+      <div class="scale" id="teal"></div>
+    </section>
+
+    <section>
+      <div class="sec-head"><h2>Neutral — Cool gray</h2><span class="line"></span><span class="tag">--neutral-0 → 900</span></div>
+      <div class="scale neu" id="neutral"></div>
+    </section>
+
+    <section>
+      <div class="sec-head"><h2>Semânticas</h2><span class="line"></span><span class="tag">estados</span></div>
+      <div class="grid3" id="semantic"></div>
+    </section>
+
+    <section>
+      <div class="sec-head"><h2>Em uso</h2><span class="line"></span><span class="tag">navbar · hero</span></div>
+      <div class="examples">
+        <div class="ex">
+          <div class="label">// navbar — superfície clara</div>
+          <div class="demo-nav" style="background:#fff;border-bottom:1px solid #D6D4DF">
+            <div class="bword" style="color:#212951">espaço<span style="color:#74C5C6">neuro</span></div>
+            <nav>
+              <span style="color:#514F60">Sobre</span>
+              <span style="color:#212951;font-weight:600">Serviços</span>
+              <span style="color:#514F60">Contato</span>
+              <button class="btn" style="background:#212951;color:#F3F0F6">Agendar</button>
+            </nav>
+          </div>
+        </div>
+        <div class="ex">
+          <div class="label">// navbar — superfície navy</div>
+          <div class="demo-nav" style="background:#212951">
+            <div class="bword" style="color:#F3F0F6">espaço<span style="color:#74C5C6">neuro</span></div>
+            <nav>
+              <span style="color:#A1AAD9">Sobre</span>
+              <span style="color:#F3F0F6;font-weight:600">Serviços</span>
+              <span style="color:#A1AAD9">Contato</span>
+              <button class="btn" style="background:#74C5C6;color:#212951">Agendar</button>
+            </nav>
+          </div>
+        </div>
+        <div class="ex" style="grid-column:1/-1">
+          <div class="label">// hero — assinatura da marca</div>
+          <div class="demo-hero">
+            <h3>Cuidado que respeita o <b>seu tempo</b> e o seu espaço.</h3>
+            <p>Acompanhamento neuropsicológico humano, claro e baseado em evidências.</p>
+            <div class="demo-btns">
+              <button class="btn" style="background:#74C5C6;color:#212951;padding:12px 22px">Começar agora</button>
+              <button class="btn" style="background:transparent;color:#F3F0F6;border:1px solid #323E7B;padding:12px 22px">Saber mais</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div class="toast" id="toast">copiado</div>
+
+<script>
+const navy={50:'#F5F6FA',100:'#E8E9F3',200:'#C9CEE9',300:'#A1AAD9',400:'#7583C7',500:'#4A5CB5',600:'#3E4D98',700:'#323E7B',800:'#26305E',900:'#212951',950:'#161B38'};
+const teal={50:'#F2FAFA',100:'#E1F3F3',200:'#C2E8E8',300:'#9DDADB',400:'#74C5C6',500:'#4FB3B4',600:'#3B9596',700:'#327A7B',800:'#285E5E',900:'#1E4747',950:'#122B2B'};
+const neutral={0:'#FFFFFF',50:'#F3F0F6',100:'#E9E7EF',200:'#D6D4DF',300:'#B6B4C3',400:'#8F8DA0',500:'#6B6A7C',600:'#514F60',700:'#3D3C4A',800:'#2A2935',900:'#1A1922'};
+const semantic=[
+  {nm:'Success',hx:'#2E9E6B'},{nm:'Warning',hx:'#E0A33B'},
+  {nm:'Error',hx:'#D7564E'},{nm:'Info',hx:'#74C5C6'}
+];
+const brandSteps={navy:'900',teal:'400',neutral:'50'};
+
+function lum(hex){const c=hex.replace('#','');const r=parseInt(c.slice(0,2),16)/255,g=parseInt(c.slice(2,4),16)/255,b=parseInt(c.slice(4,6),16)/255;const f=v=>v<=.03928?v/12.92:Math.pow((v+.055)/1.055,2.4);return .2126*f(r)+.7152*f(g)+.0722*f(b);}
+function ink(hex){return lum(hex)>0.42?'#212951':'#F3F0F6';}
+
+function build(id,obj){
+  const el=document.getElementById(id);
+  Object.entries(obj).forEach(([k,v])=>{
+    const d=document.createElement('div');
+    d.className='swatch'+(brandSteps[id]===k?' brand-mark':'');
+    d.style.background=v;d.style.color=ink(v);
+    d.innerHTML=`<div class="k">${k}</div><div class="v">${v}</div>`;
+    d.onclick=()=>copy(v);
+    el.appendChild(d);
+  });
+}
+build('navy',navy);build('teal',teal);build('neutral',neutral);
+
+const sem=document.getElementById('semantic');
+semantic.forEach(s=>{
+  const d=document.createElement('div');d.className='sem';
+  d.innerHTML=`<div class="cap" style="background:${s.hx};color:${ink(s.hx)}">${s.nm}</div><div class="meta"><div class="nm">${s.nm}</div><div class="hx">${s.hx}</div></div>`;
+  d.onclick=()=>copy(s.hx);sem.appendChild(d);
+});
+
+let t;
+function copy(v){navigator.clipboard&&navigator.clipboard.writeText(v);const el=document.getElementById('toast');el.textContent=v+' copiado';el.classList.add('show');clearTimeout(t);t=setTimeout(()=>el.classList.remove('show'),1200);}
+</script>
+</body>
+</html>

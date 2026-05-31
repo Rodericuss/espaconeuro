@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Espaço Neuro — Clínica de Neuropsicologia</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+  /* ---------- Hero ---------- */
+  .hero{background:var(--navy-900);position:relative;overflow:hidden;}
+  .hero::before{content:'';position:absolute;width:680px;height:680px;right:-180px;top:-220px;
+    background:radial-gradient(circle,rgba(116,197,198,.16),transparent 62%);pointer-events:none;}
+  .hero::after{content:'';position:absolute;width:420px;height:420px;left:-140px;bottom:-160px;
+    background:radial-gradient(circle,rgba(116,197,198,.10),transparent 64%);pointer-events:none;}
+  .hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:56px;align-items:center;
+    padding-block:96px 104px;position:relative;z-index:1;}
+  .hero h1{color:var(--n-50);font-size:clamp(38px,5.4vw,62px);line-height:1.04;}
+  .hero h1 b{color:var(--teal-400);font-weight:600;}
+  .hero p.lead{color:var(--navy-300);font-size:19px;margin:22px 0 34px;max-width:46ch;}
+  .hero-btns{display:flex;gap:14px;flex-wrap:wrap;}
+  .hero-trust{display:flex;gap:26px;margin-top:40px;flex-wrap:wrap;}
+  .hero-trust .ti{display:flex;flex-direction:column;}
+  .hero-trust .ti .num{font-family:var(--font-display);font-weight:600;font-size:26px;color:var(--teal-400);}
+  .hero-trust .ti .lab{font-size:13.5px;color:var(--navy-300);}
+  .hero-visual{position:relative;}
+  .hero-photo{width:100%;height:480px;border-radius:var(--radius-lg);box-shadow:var(--shadow-lg);}
+  .hero-badge{position:absolute;left:-26px;bottom:34px;background:var(--surface);border-radius:var(--radius-md);
+    padding:16px 20px;box-shadow:var(--shadow-md);display:flex;align-items:center;gap:14px;max-width:260px;}
+  .hero-badge .ic{width:44px;height:44px;border-radius:12px;background:var(--teal-100);color:var(--teal-700);
+    display:flex;align-items:center;justify-content:center;flex:0 0 auto;}
+  .hero-badge .tx strong{display:block;font-family:var(--font-display);font-size:15px;color:var(--navy-900);}
+  .hero-badge .tx span{font-size:13px;color:var(--text-muted);}
+
+  /* ---------- Stat / trust strip ---------- */
+  .logos-strip{background:var(--surface);border-bottom:1px solid var(--border);}
+  .logos-strip .wrap{display:flex;align-items:center;justify-content:space-between;gap:28px;padding:26px 28px;flex-wrap:wrap;}
+  .logos-strip p{font-size:14px;color:var(--text-subtle);font-weight:500;}
+  .logos-strip .items{display:flex;gap:40px;flex-wrap:wrap;color:var(--navy-400);font-family:var(--font-display);font-weight:600;font-size:17px;}
+
+  /* ---------- Services ---------- */
+  .svc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;}
+  .svc-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);
+    padding:32px 28px;transition:transform .2s var(--ease),box-shadow .2s,border-color .2s;}
+  .svc-card:hover{transform:translateY(-6px);box-shadow:var(--shadow-md);border-color:var(--teal-200);}
+  .svc-card .ic{width:54px;height:54px;border-radius:15px;background:var(--teal-100);color:var(--teal-700);
+    display:flex;align-items:center;justify-content:center;margin-bottom:20px;}
+  .svc-card h3{font-size:21px;margin-bottom:10px;}
+  .svc-card p{color:var(--text-muted);font-size:15.5px;}
+  .svc-card .more{display:inline-flex;align-items:center;gap:7px;margin-top:18px;color:var(--teal-700);font-weight:600;font-size:14.5px;}
+  .svc-card:hover .more{gap:11px;}
+
+  /* ---------- Approach (split) ---------- */
+  .approach{background:var(--surface);}
+  .approach-grid{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center;}
+  .approach-photo{width:100%;height:460px;border-radius:var(--radius-lg);box-shadow:var(--shadow-md);}
+  .feat-list{list-style:none;display:flex;flex-direction:column;gap:22px;margin-top:28px;}
+  .feat-list li{display:flex;gap:16px;}
+  .feat-list .fi{width:42px;height:42px;border-radius:12px;flex:0 0 auto;background:var(--teal-400);color:var(--navy-900);
+    display:flex;align-items:center;justify-content:center;}
+  .feat-list h4{font-size:17px;margin-bottom:3px;}
+  .feat-list p{color:var(--text-muted);font-size:15px;}
+
+  /* ---------- Team teaser ---------- */
+  .team-teaser{background:var(--bg);}
+  .tt-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:8px;}
+  .tt-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;
+    transition:transform .2s var(--ease),box-shadow .2s;}
+  .tt-card:hover{transform:translateY(-6px);box-shadow:var(--shadow-md);}
+  .tt-photo{width:100%;height:280px;background:var(--navy-100);}
+  .tt-body{padding:22px 24px 26px;}
+  .tt-body .prof{font-size:13px;font-weight:600;color:var(--teal-700);text-transform:uppercase;letter-spacing:.06em;}
+  .tt-body h4{font-size:20px;margin:6px 0 4px;}
+  .tt-body .crp{font-size:13.5px;color:var(--text-subtle);}
+
+  /* ---------- CTA band ---------- */
+  .cta{background:linear-gradient(120deg,var(--navy-900),var(--navy-800));position:relative;overflow:hidden;}
+  .cta::before{content:'';position:absolute;width:520px;height:520px;right:-120px;top:-160px;
+    background:radial-gradient(circle,rgba(116,197,198,.18),transparent 62%);}
+  .cta .wrap{position:relative;z-index:1;text-align:center;padding:84px 28px;}
+  .cta h2{color:var(--n-50);font-size:clamp(28px,4vw,42px);max-width:18ch;margin:14px auto 0;}
+  .cta p{color:var(--navy-300);font-size:18px;margin:18px auto 32px;max-width:52ch;}
+  .cta .hero-btns{justify-content:center;}
+
+  @media(max-width:920px){
+    .hero-grid,.approach-grid{grid-template-columns:1fr;gap:40px;}
+    .hero-visual{order:-1;}
+    .svc-grid,.tt-grid{grid-template-columns:1fr;}
+    .hero-photo{height:340px;}
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== Navbar ===== -->
+<header class="nav" data-screen-label="Navbar">
+  <div class="wrap nav-inner">
+    <a class="brand" href="index.html" aria-label="Espaço Neuro">
+      <img class="mark" style="height:34px;width:auto;border-radius:0;object-fit:contain" src="assets/logo-wordmark.png" alt="Espaço Neuro">
+    </a>
+    <nav class="nav-links">
+      <a href="index.html" class="active">Início</a>
+      <a href="index.html#servicos">Serviços</a>
+      <a href="index.html#abordagem">Abordagem</a>
+      <a href="equipe.html">Equipe</a>
+      <a href="index.html#contato">Contato</a>
+    </nav>
+    <div class="nav-cta">
+      <a href="#contato" class="btn btn-primary btn-sm">Agendar consulta</a>
+    </div>
+    <button class="nav-toggle" id="navToggle" aria-label="Menu"><span></span><span></span><span></span></button>
+  </div>
+  <nav class="mobile-menu" id="mobileMenu" style="display:none;background:var(--navy-800);">
+    <div class="wrap" style="display:flex;flex-direction:column;gap:4px;padding:14px 28px 22px;">
+      <a href="index.html" style="color:var(--n-50);padding:11px 0;">Início</a>
+      <a href="index.html#servicos" style="color:var(--navy-300);padding:11px 0;">Serviços</a>
+      <a href="index.html#abordagem" style="color:var(--navy-300);padding:11px 0;">Abordagem</a>
+      <a href="equipe.html" style="color:var(--navy-300);padding:11px 0;">Equipe</a>
+      <a href="index.html#contato" style="color:var(--navy-300);padding:11px 0;">Contato</a>
+      <a href="#contato" class="btn btn-primary btn-sm" style="margin-top:10px;">Agendar consulta</a>
+    </div>
+  </nav>
+</header>
+
+<!-- ===== Hero ===== -->
+<section class="hero" data-screen-label="Hero">
+  <div class="wrap hero-grid">
+    <div class="hero-copy">
+      <span class="eyebrow on-dark">Clínica de neuropsicologia</span>
+      <h1>Cuidado que respeita o <b>seu tempo</b> e o seu espaço.</h1>
+      <p class="lead">Avaliação e acompanhamento neuropsicológico humano, claro e baseado em evidências — para todas as idades, presencial ou online.</p>
+      <div class="hero-btns">
+        <a href="#contato" class="btn btn-primary">Agendar consulta</a>
+        <a href="equipe.html" class="btn btn-ghost-dark">Conhecer a equipe</a>
+      </div>
+      <div class="hero-trust">
+        <div class="ti"><span class="num">+12</span><span class="lab">especialistas</span></div>
+        <div class="ti"><span class="num">8</span><span class="lab">anos de atuação</span></div>
+        <div class="ti"><span class="num">100%</span><span class="lab">presencial e online</span></div>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <image-slot id="hero-photo" class="hero-photo" shape="rounded" radius="24"
+        placeholder="Foto do espaço / acolhimento (arraste aqui)"></image-slot>
+      <div class="hero-badge">
+        <div class="ic">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+        </div>
+        <div class="tx"><strong>Atendimento ético</strong><span>Profissionais com registro ativo</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Trust strip ===== -->
+<div class="logos-strip">
+  <div class="wrap">
+    <p>Áreas de cuidado</p>
+    <div class="items">
+      <span>Psicologia</span><span>Neuropsicologia</span><span>Neuropsicopedagogia</span><span>Avaliação</span>
+    </div>
+  </div>
+</div>
+
+<!-- ===== Services ===== -->
+<section class="section" id="servicos" data-screen-label="Serviços">
+  <div class="wrap">
+    <div class="section-head center">
+      <span class="eyebrow">O que oferecemos</span>
+      <h2>Serviços pensados para cada fase da vida</h2>
+      <p>Da avaliação ao acompanhamento contínuo, com um plano individual para cada pessoa e família.</p>
+    </div>
+    <div class="svc-grid">
+      <article class="svc-card">
+        <div class="ic"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 1.98-3A2.5 2.5 0 0 1 9.5 2Z"></path><path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-1.98-3A2.5 2.5 0 0 0 14.5 2Z"></path></svg></div>
+        <h3>Avaliação neuropsicológica</h3>
+        <p>Investigação detalhada de atenção, memória, funções executivas e aprendizagem, com laudo completo e devolutiva orientada.</p>
+        <a href="#contato" class="more">Saiba mais
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a>
+      </article>
+      <article class="svc-card">
+        <div class="ic"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.42 4.58a5.4 5.4 0 0 0-7.65 0L12 5.35l-.77-.77a5.4 5.4 0 0 0-7.65 7.65l.77.77L12 20.66l7.65-7.66.77-.77a5.4 5.4 0 0 0 0-7.65z"></path></svg></div>
+        <h3>Psicoterapia</h3>
+        <p>Acompanhamento individual, de casal e familiar para ansiedade, depressão, luto, relacionamentos e desenvolvimento pessoal.</p>
+        <a href="#contato" class="more">Saiba mais
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a>
+      </article>
+      <article class="svc-card">
+        <div class="ic"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg></div>
+        <h3>Neuropsicopedagogia</h3>
+        <p>Intervenção nas dificuldades de aprendizagem e na alfabetização, integrando escola, família e estratégias personalizadas.</p>
+        <a href="#contato" class="more">Saiba mais
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Approach ===== -->
+<section class="section approach" id="abordagem" data-screen-label="Abordagem">
+  <div class="wrap approach-grid">
+    <div>
+      <span class="eyebrow">Nossa abordagem</span>
+      <h2 style="font-size:clamp(28px,3.6vw,40px);margin-top:14px;">Um espaço seguro para entender e cuidar do cérebro e das emoções</h2>
+      <ul class="feat-list">
+        <li>
+          <div class="fi"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg></div>
+          <div><h4>Escuta sem pressa</h4><p>Cada atendimento começa por entender a história e o contexto de quem chega.</p></div>
+        </li>
+        <li>
+          <div class="fi"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 9V5a3 3 0 0 0-6 0v4"></path><rect x="2" y="9" width="20" height="11" rx="2"></rect></svg></div>
+          <div><h4>Baseado em evidências</h4><p>Instrumentos validados e protocolos atualizados em todas as etapas.</p></div>
+        </li>
+        <li>
+          <div class="fi"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg></div>
+          <div><h4>Cuidado em rede</h4><p>Trabalho integrado entre profissionais, família e escola quando necessário.</p></div>
+        </li>
+      </ul>
+      <a href="equipe.html" class="btn btn-ghost-light" style="margin-top:32px;">Conhecer nossos profissionais</a>
+    </div>
+    <div>
+      <image-slot id="approach-photo" class="approach-photo" shape="rounded" radius="24"
+        placeholder="Foto de atendimento / ambiente (arraste aqui)"></image-slot>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Team teaser ===== -->
+<section class="section team-teaser" data-screen-label="Prévia da equipe">
+  <div class="wrap">
+    <div class="section-head center">
+      <span class="eyebrow">Quem cuida de você</span>
+      <h2>Uma equipe multidisciplinar</h2>
+      <p>Psicólogos, neuropsicólogos e neuropsicopedagogos com especializações para diferentes demandas.</p>
+    </div>
+    <div class="tt-grid">
+      <article class="tt-card">
+        <image-slot id="tt-1" class="tt-photo" shape="rect" placeholder="Foto"></image-slot>
+        <div class="tt-body"><span class="prof">Neuropsicóloga</span><h4>Dra. Helena Marques</h4><span class="crp">CRP 06/123456</span></div>
+      </article>
+      <article class="tt-card">
+        <image-slot id="tt-2" class="tt-photo" shape="rect" placeholder="Foto"></image-slot>
+        <div class="tt-body"><span class="prof">Psicólogo clínico</span><h4>Dr. Rafael Nunes</h4><span class="crp">CRP 06/234567</span></div>
+      </article>
+      <article class="tt-card">
+        <image-slot id="tt-3" class="tt-photo" shape="rect" placeholder="Foto"></image-slot>
+        <div class="tt-body"><span class="prof">Neuropsicopedagoga</span><h4>Camila Ferreira</h4><span class="crp">CRFa 2-98765</span></div>
+      </article>
+    </div>
+    <div style="text-align:center;margin-top:44px;">
+      <a href="equipe.html" class="btn btn-navy">Ver equipe completa</a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CTA ===== -->
+<section class="cta" id="contato" data-screen-label="CTA contato">
+  <div class="wrap">
+    <span class="eyebrow on-dark" style="justify-content:center;">Vamos começar</span>
+    <h2>O primeiro passo pode ser hoje.</h2>
+    <p>Conte para a gente o que está buscando. Retornamos em até um dia útil para encontrar o melhor caminho e profissional para você.</p>
+    <div class="hero-btns">
+      <a href="https://wa.me/" class="btn btn-primary">Falar no WhatsApp</a>
+      <a href="/cdn-cgi/l/email-protection#0b6864657f6a7f644b6e787b6a6864656e7e796425686466256979" class="btn btn-ghost-dark">Enviar e-mail</a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Footer ===== -->
+<footer class="footer" data-screen-label="Footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <img src="assets/logo-wordmark.png" alt="Espaço Neuro" style="height:42px;width:auto;margin-bottom:18px;">
+        <p>Clínica de neuropsicologia, psicologia e neuropsicopedagogia. Cuidado humano e baseado em evidências para todas as idades.</p>
+      </div>
+      <div>
+        <h4>Navegação</h4>
+        <ul>
+          <li><a href="index.html">Início</a></li>
+          <li><a href="index.html#servicos">Serviços</a></li>
+          <li><a href="index.html#abordagem">Abordagem</a></li>
+          <li><a href="equipe.html">Equipe</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Serviços</h4>
+        <ul>
+          <li><a href="index.html#servicos">Avaliação neuropsicológica</a></li>
+          <li><a href="index.html#servicos">Psicoterapia</a></li>
+          <li><a href="index.html#servicos">Neuropsicopedagogia</a></li>
+          <li><a href="equipe.html">Atendimento infantil</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Contato</h4>
+        <ul>
+          <li><a href="/cdn-cgi/l/email-protection#492a26273d283d26092c3a39282a26272c3c3b26672a2624672b3b"><span class="__cf_email__" data-cfemail="0e6d61607a6f7a614e6b7d7e6f6d61606b7b7c61206d6163206c7c">[email&#160;protected]</span></a></li>
+          <li><a href="tel:+550000000000">(00) 0000-0000</a></li>
+          <li><a href="#">São Paulo · SP</a></li>
+        </ul>
+        <div class="socials" style="margin-top:18px;">
+          <a href="#" aria-label="Instagram"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"></rect><circle cx="12" cy="12" r="4"></circle><line x1="17.5" y1="6.5" x2="17.5" y2="6.5"></line></svg></a>
+          <a href="#" aria-label="WhatsApp"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg></a>
+          <a href="#" aria-label="LinkedIn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Espaço Neuro. Todos os direitos reservados.</span>
+      <span>Atendimento presencial e online · CNPJ 00.000.000/0001-00</span>
+    </div>
+  </div>
+</footer>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="image-slot.js"></script>
+<script>
+  const t=document.getElementById('navToggle'),m=document.getElementById('mobileMenu');
+  t&&t.addEventListener('click',()=>{m.style.display=m.style.display==='none'?'block':'none';});
+</script>
+</body>
+</html>

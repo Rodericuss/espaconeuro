@@ -1,0 +1,118 @@
+/* ============================================================
+   Espaço Neuro — Sistema de estilos
+   Derivado da paleta da marca (design-tokens.md)
+   ============================================================ */
+:root{
+  /* Brand scales */
+  --navy-50:#F5F6FA; --navy-100:#E8E9F3; --navy-200:#C9CEE9; --navy-300:#A1AAD9;
+  --navy-400:#7583C7; --navy-500:#4A5CB5; --navy-600:#3E4D98; --navy-700:#323E7B;
+  --navy-800:#26305E; --navy-900:#212951; --navy-950:#161B38;
+  --teal-50:#F2FAFA; --teal-100:#E1F3F3; --teal-200:#C2E8E8; --teal-300:#9DDADB;
+  --teal-400:#74C5C6; --teal-500:#4FB3B4; --teal-600:#3B9596; --teal-700:#327A7B;
+  --teal-800:#285E5E; --teal-900:#1E4747;
+  --n-0:#FFFFFF; --n-50:#F3F0F6; --n-100:#E9E7EF; --n-200:#D6D4DF; --n-300:#B6B4C3;
+  --n-400:#8F8DA0; --n-500:#6B6A7C; --n-600:#514F60; --n-700:#3D3C4A; --n-800:#2A2935; --n-900:#1A1922;
+
+  /* Semantic */
+  --bg:var(--n-50); --surface:#fff; --text:var(--navy-900);
+  --text-muted:var(--n-600); --text-subtle:var(--n-400);
+  --border:var(--n-200); --border-strong:var(--n-300);
+  --accent:var(--teal-400); --accent-ink:var(--teal-700);
+
+  --radius-sm:10px; --radius-md:16px; --radius-lg:24px; --radius-pill:999px;
+  --shadow-sm:0 4px 14px -8px rgba(33,41,81,.20);
+  --shadow-md:0 14px 36px -14px rgba(33,41,81,.26);
+  --shadow-lg:0 28px 64px -24px rgba(33,41,81,.34);
+  --maxw:1180px;
+  --ease:cubic-bezier(.2,.8,.2,1);
+
+  --font-display:'Poppins',system-ui,sans-serif;
+  --font-body:'Inter',system-ui,sans-serif;
+}
+
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{
+  font-family:var(--font-body);
+  background:var(--bg);
+  color:var(--text);
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+img{max-width:100%;display:block;}
+a{color:inherit;text-decoration:none;}
+h1,h2,h3,h4{font-family:var(--font-display);font-weight:600;line-height:1.12;letter-spacing:-.015em;color:var(--navy-900);}
+
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 28px;}
+.eyebrow{
+  font-family:var(--font-body);font-weight:600;font-size:13px;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--teal-700);display:inline-flex;align-items:center;gap:9px;
+}
+.eyebrow::before{content:'';width:22px;height:2px;background:var(--teal-400);border-radius:2px;}
+.eyebrow.on-dark{color:var(--teal-300);}
+.eyebrow.on-dark::before{background:var(--teal-400);}
+
+/* Buttons */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:9px;
+  font-family:var(--font-body);font-weight:600;font-size:15px;
+  padding:13px 24px;border-radius:var(--radius-pill);border:1.5px solid transparent;
+  cursor:pointer;transition:transform .18s var(--ease),background .18s,box-shadow .18s,border-color .18s;
+}
+.btn:active{transform:translateY(1px);}
+.btn-primary{background:var(--teal-400);color:var(--navy-900);}
+.btn-primary:hover{background:var(--teal-300);box-shadow:0 10px 24px -10px rgba(116,197,198,.7);}
+.btn-navy{background:var(--navy-900);color:var(--n-50);}
+.btn-navy:hover{background:var(--navy-950);}
+.btn-ghost-dark{background:transparent;color:var(--n-50);border-color:var(--navy-700);}
+.btn-ghost-dark:hover{border-color:var(--teal-400);color:#fff;}
+.btn-ghost-light{background:transparent;color:var(--navy-900);border-color:var(--border-strong);}
+.btn-ghost-light:hover{border-color:var(--navy-900);}
+.btn-sm{padding:10px 18px;font-size:14px;}
+
+/* ---------- Navbar ---------- */
+.nav{position:sticky;top:0;z-index:40;background:var(--navy-900);}
+.nav-inner{display:flex;align-items:center;justify-content:space-between;height:76px;}
+.brand{display:flex;align-items:center;gap:12px;font-family:var(--font-display);font-weight:600;font-size:21px;color:var(--n-50);}
+.brand .mark{height:40px;width:40px;border-radius:11px;object-fit:cover;}
+.brand b{color:var(--teal-400);font-weight:600;}
+.brand .word{letter-spacing:-.02em;}
+.nav-links{display:flex;align-items:center;gap:30px;}
+.nav-links a{color:var(--navy-300);font-size:15px;font-weight:500;transition:color .15s;position:relative;padding:6px 0;}
+.nav-links a:hover{color:var(--n-50);}
+.nav-links a.active{color:var(--n-50);}
+.nav-links a.active::after{content:'';position:absolute;left:0;right:0;bottom:-2px;height:2px;background:var(--teal-400);border-radius:2px;}
+.nav-cta{display:flex;align-items:center;gap:14px;}
+.nav-toggle{display:none;background:none;border:none;cursor:pointer;flex-direction:column;gap:5px;padding:8px;}
+.nav-toggle span{width:24px;height:2px;background:var(--n-50);border-radius:2px;transition:.2s;}
+
+/* ---------- Footer ---------- */
+.footer{background:var(--navy-950);color:var(--navy-300);padding:72px 0 36px;}
+.footer-grid{display:grid;grid-template-columns:1.6fr 1fr 1fr 1.2fr;gap:48px;}
+.footer h4{color:var(--n-50);font-size:15px;font-family:var(--font-body);font-weight:600;letter-spacing:.04em;text-transform:uppercase;margin-bottom:18px;}
+.footer .brand{margin-bottom:18px;}
+.footer p{font-size:14.5px;color:var(--navy-300);max-width:34ch;}
+.footer ul{list-style:none;display:flex;flex-direction:column;gap:11px;}
+.footer ul a{font-size:14.5px;color:var(--navy-300);transition:color .15s;}
+.footer ul a:hover{color:var(--teal-300);}
+.footer-bottom{margin-top:56px;padding-top:26px;border-top:1px solid var(--navy-800);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px;font-size:13.5px;color:var(--navy-400);}
+.socials{display:flex;gap:10px;}
+.socials a{width:38px;height:38px;border-radius:50%;border:1px solid var(--navy-800);display:flex;align-items:center;justify-content:center;color:var(--navy-300);transition:.18s;}
+.socials a:hover{background:var(--teal-400);color:var(--navy-900);border-color:var(--teal-400);}
+
+/* ---------- Sections ---------- */
+.section{padding:104px 0;}
+.section-head{max-width:680px;margin-bottom:52px;}
+.section-head.center{margin-left:auto;margin-right:auto;text-align:center;}
+.section-head h2{font-size:clamp(30px,4vw,44px);margin:16px 0 0;}
+.section-head p{color:var(--text-muted);font-size:18px;margin-top:16px;}
+
+@media(max-width:920px){
+  .nav-links,.nav-cta .btn{display:none;}
+  .nav-toggle{display:flex;}
+  .footer-grid{grid-template-columns:1fr 1fr;gap:36px;}
+  .section{padding:72px 0;}
+}
+@media(max-width:560px){
+  .footer-grid{grid-template-columns:1fr;}
+}
