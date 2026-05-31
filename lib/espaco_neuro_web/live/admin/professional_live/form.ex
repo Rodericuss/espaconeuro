@@ -54,7 +54,13 @@ defmodule EspacoNeuroWeb.Admin.ProfessionalLive.Form do
             </p>
           </div>
           <p :if={@professional.photo_path} class="mt-2 text-sm">
-            Foto atual: <img src={@professional.photo_path} width="80" class="inline rounded" />
+            Foto atual:
+            <img
+              src={@professional.photo_path}
+              alt={@professional.name}
+              width="80"
+              class="inline rounded"
+            />
           </p>
         </div>
 

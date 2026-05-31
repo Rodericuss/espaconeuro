@@ -1,0 +1,19 @@
+# ignore build artifacts
+/_build/
+/deps/
+
+# ignore priv/static (rebuilt in Docker)
+/priv/static/assets/
+
+# ignore env files
+.env
+.env.*
+
+# ignore node modules
+/assets/node_modules/
+
+# git
+.git/
+
+# docs
+/docs/
