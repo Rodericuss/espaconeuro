@@ -4,6 +4,7 @@ defmodule EspacoNeuroWeb.HomeLive do
   import EspacoNeuroWeb.SiteComponents
 
   alias EspacoNeuro.Catalog
+  alias EspacoNeuro.Contact
 
   @impl true
   def mount(_params, _session, socket) do
@@ -14,7 +15,26 @@ defmodule EspacoNeuroWeb.HomeLive do
      socket
      |> assign(:page_title, "Início")
      |> assign(:services, services)
-     |> assign(:professionals, professionals)}
+     |> assign(:professionals, professionals)
+     |> assign(:contact_form, %{"name" => "", "email" => "", "phone" => "", "message" => ""})
+     |> assign(:contact_errors, [])
+     |> assign(:contact_sent, false)}
+  end
+
+  @impl true
+  def handle_event("send_contact", %{"contact" => params}, socket) do
+    if params["website"] && params["website"] != "" do
+      {:noreply, assign(socket, :contact_sent, true)}
+    else
+      case Contact.validate(params) do
+        :ok ->
+          Contact.send_contact_message(params)
+          {:noreply, socket |> assign(:contact_sent, true) |> assign(:contact_errors, [])}
+
+        {:error, errors} ->
+          {:noreply, assign(socket, :contact_errors, errors)}
+      end
+    end
   end
 
   @impl true
@@ -199,7 +219,79 @@ defmodule EspacoNeuroWeb.HomeLive do
       </div>
     </section>
 
-    <.cta_section />
+    <section class="cta" id="contato">
+      <div class="wrap" style="max-width:600px;margin:0 auto;">
+        <h2 style="color:var(--n-50);font-size:clamp(28px,4vw,40px);text-align:center;">
+          Entre em contato
+        </h2>
+        <p style="color:var(--navy-300);font-size:18px;margin:16px auto 32px;text-align:center;max-width:52ch;">
+          Envie sua mensagem ou agende pelo WhatsApp. Respondemos em até 24h.
+        </p>
+
+        <div
+          :if={@contact_sent}
+          style="background:var(--teal-500);color:white;padding:20px;border-radius:12px;text-align:center;margin-bottom:24px;"
+        >
+          <p style="font-weight:600;font-size:18px;">Mensagem enviada!</p>
+          <p>Entraremos em contato em breve.</p>
+        </div>
+
+        <.form
+          :if={!@contact_sent}
+          for={%{}}
+          as={:contact}
+          phx-submit="send_contact"
+          style="display:flex;flex-direction:column;gap:16px;"
+        >
+          <div :for={{field, msg} <- @contact_errors} style="color:#f87171;font-size:14px;">
+            {field}: {msg}
+          </div>
+          <input
+            type="text"
+            name="contact[website]"
+            style="display:none"
+            tabindex="-1"
+            autocomplete="off"
+          />
+          <input
+            type="text"
+            name="contact[name]"
+            placeholder="Seu nome"
+            required
+            style="padding:12px 16px;border-radius:8px;border:1px solid var(--navy-200);font-size:16px;"
+          />
+          <input
+            type="email"
+            name="contact[email]"
+            placeholder="Seu e-mail"
+            required
+            style="padding:12px 16px;border-radius:8px;border:1px solid var(--navy-200);font-size:16px;"
+          />
+          <input
+            type="tel"
+            name="contact[phone]"
+            placeholder="Telefone (opcional)"
+            style="padding:12px 16px;border-radius:8px;border:1px solid var(--navy-200);font-size:16px;"
+          />
+          <textarea
+            name="contact[message]"
+            placeholder="Sua mensagem"
+            required
+            rows="4"
+            style="padding:12px 16px;border-radius:8px;border:1px solid var(--navy-200);font-size:16px;resize:vertical;"
+          />
+          <button type="submit" class="btn btn-primary" style="align-self:center;">
+            Enviar mensagem
+          </button>
+        </.form>
+
+        <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:24px;">
+          <a href="https://wa.me/5500000000000" class="btn btn-ghost-dark" target="_blank">
+            Ou agende pelo WhatsApp
+          </a>
+        </div>
+      </div>
+    </section>
     <.site_footer />
     """
   end

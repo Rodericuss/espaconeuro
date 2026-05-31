@@ -9,7 +9,10 @@ defmodule EspacoNeuro.Accounts.UserNotifier do
     email =
       new()
       |> to(recipient)
-      |> from({"EspacoNeuro", "contact@example.com"})
+      |> from(
+        {"Espaço Neuro",
+         Application.get_env(:espaco_neuro, :contact_email, "contato@espaconeuro.com.br")}
+      )
       |> subject(subject)
       |> text_body(body)
 

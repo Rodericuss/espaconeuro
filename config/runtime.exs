@@ -33,6 +33,16 @@ if System.get_env("AWS_ACCESS_KEY_ID") do
   config :espaco_neuro, :s3_bucket, System.get_env("S3_BUCKET")
 end
 
+if System.get_env("RESEND_API_KEY") do
+  config :espaco_neuro, EspacoNeuro.Mailer,
+    adapter: Swoosh.Adapters.Resend,
+    api_key: System.get_env("RESEND_API_KEY")
+end
+
+config :espaco_neuro,
+       :contact_email,
+       System.get_env("CONTACT_EMAIL", "contato@espaconeuro.com.br")
+
 if config_env() == :prod do
   database_url =
     System.get_env("DATABASE_URL") ||
