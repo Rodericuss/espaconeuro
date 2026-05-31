@@ -20,7 +20,13 @@ defmodule EspacoNeuroWeb.Router do
   scope "/", EspacoNeuroWeb do
     pipe_through :browser
 
-    get "/", PageController, :home
+    live_session :public, layout: {EspacoNeuroWeb.Layouts, :public} do
+      live "/", HomeLive, :index
+      live "/servicos", ServicoLive.Index, :index
+      live "/servicos/:slug", ServicoLive.Show, :show
+      live "/equipe", EquipeLive.Index, :index
+      live "/equipe/:slug", EquipeLive.Show, :show
+    end
   end
 
   # Other scopes may use custom stacks.
