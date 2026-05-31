@@ -23,6 +23,16 @@ end
 config :espaco_neuro, EspacoNeuroWeb.Endpoint,
   http: [port: String.to_integer(System.get_env("PORT", "4000"))]
 
+# S3 upload configuration
+if System.get_env("AWS_ACCESS_KEY_ID") do
+  config :ex_aws,
+    access_key_id: System.get_env("AWS_ACCESS_KEY_ID"),
+    secret_access_key: System.get_env("AWS_SECRET_ACCESS_KEY"),
+    region: System.get_env("AWS_REGION", "sa-east-1")
+
+  config :espaco_neuro, :s3_bucket, System.get_env("S3_BUCKET")
+end
+
 if config_env() == :prod do
   database_url =
     System.get_env("DATABASE_URL") ||
