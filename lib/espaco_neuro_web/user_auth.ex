@@ -174,7 +174,7 @@ defmodule EspacoNeuroWeb.UserAuth do
       conn
     else
       conn
-      |> put_flash(:error, "You must re-authenticate to access this page.")
+      |> put_flash(:error, "Você precisa se re-autenticar para acessar esta página.")
       |> maybe_store_return_to()
       |> redirect(to: ~p"/users/log-in")
       |> halt()
@@ -185,7 +185,7 @@ defmodule EspacoNeuroWeb.UserAuth do
   Plug for routes that require the user to not be authenticated.
   """
   def redirect_if_user_is_authenticated(conn, _opts) do
-    if conn.assigns.current_scope do
+    if conn.assigns.current_scope && !get_session(conn, :user_return_to) do
       conn
       |> redirect(to: signed_in_path(conn))
       |> halt()
@@ -194,7 +194,7 @@ defmodule EspacoNeuroWeb.UserAuth do
     end
   end
 
-  defp signed_in_path(_conn), do: ~p"/"
+  defp signed_in_path(_conn), do: ~p"/admin"
 
   @doc """
   Plug for routes that require the user to be authenticated.
@@ -204,7 +204,7 @@ defmodule EspacoNeuroWeb.UserAuth do
       conn
     else
       conn
-      |> put_flash(:error, "You must log in to access this page.")
+      |> put_flash(:error, "Você precisa fazer login para acessar esta página.")
       |> maybe_store_return_to()
       |> redirect(to: ~p"/users/log-in")
       |> halt()
@@ -216,4 +216,36 @@ defmodule EspacoNeuroWeb.UserAuth do
   end
 
   defp maybe_store_return_to(conn), do: conn
+
+  def on_mount(:require_authenticated, _params, session, socket) do
+    socket = mount_current_scope(session, socket)
+
+    if socket.assigns.current_scope && socket.assigns.current_scope.user do
+      {:cont, socket}
+    else
+      socket =
+        socket
+        |> Phoenix.LiveView.put_flash(:error, "Você precisa fazer login para acessar esta página.")
+        |> Phoenix.LiveView.redirect(to: ~p"/users/log-in")
+
+      {:halt, socket}
+    end
+  end
+
+  def on_mount(:mount_current_scope, _params, session, socket) do
+    {:cont, mount_current_scope(session, socket)}
+  end
+
+  defp mount_current_scope(session, socket) do
+    Phoenix.Component.assign_new(socket, :current_scope, fn ->
+      if user_token = session["user_token"] do
+        case Accounts.get_user_by_session_token(user_token) do
+          {user, _inserted_at} -> Scope.for_user(user)
+          nil -> Scope.for_user(nil)
+        end
+      else
+        Scope.for_user(nil)
+      end
+    end)
+  end
 end

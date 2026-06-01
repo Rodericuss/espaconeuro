@@ -1,36 +1,41 @@
-<Layouts.app flash={@flash} current_scope={@current_scope}>
-  <div class="mx-auto max-w-sm space-y-4">
-    <div class="text-center">
-      <.header>
-        <p>Entrar</p>
-        <:subtitle>
-          Acesso restrito ao administrador.
-        </:subtitle>
-      </.header>
+<div class="admin-login-wrap">
+  <div class="admin-login-card">
+    <div class="login-brand">
+      <h2>Espaço Neuro</h2>
+      <p>Acesso restrito ao administrador</p>
     </div>
 
+    <p :if={Phoenix.Flash.get(@flash, :error)} style="background:#fef2f2;color:#dc2626;padding:10px 14px;border-radius:8px;font-size:14px;margin-bottom:16px;">
+      {Phoenix.Flash.get(@flash, :error)}
+    </p>
+    <p :if={Phoenix.Flash.get(@flash, :info)} style="background:var(--teal-50);color:var(--teal-700);padding:10px 14px;border-radius:8px;font-size:14px;margin-bottom:16px;">
+      {Phoenix.Flash.get(@flash, :info)}
+    </p>
+
     <.form :let={f} for={@form} as={:user} id="login_form_password" action={~p"/users/log-in"}>
-      <.input
-        readonly={!!@current_scope}
-        field={f[:email]}
+      <label for="user_email">E-mail</label>
+      <input
         type="email"
-        label="E-mail"
+        id="user_email"
+        name={f[:email].name}
+        value={f[:email].value}
         autocomplete="username"
         spellcheck="false"
         required
-        phx-mounted={JS.focus()}
+        phx-mounted={Phoenix.LiveView.JS.focus()}
       />
-      <.input
-        field={f[:password]}
+      <label for="user_password">Senha</label>
+      <input
         type="password"
-        label="Senha"
+        id="user_password"
+        name={f[:password].name}
         autocomplete="current-password"
         spellcheck="false"
         required
       />
-      <.button class="btn btn-primary w-full" name={@form[:remember_me].name} value="true">
-        Entrar <span aria-hidden="true">→</span>
-      </.button>
+      <button type="submit" class="btn btn-primary" name={@form[:remember_me].name} value="true">
+        Entrar <span aria-hidden="true">&rarr;</span>
+      </button>
     </.form>
   </div>
-</Layouts.app>
+</div>

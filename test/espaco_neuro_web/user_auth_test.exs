@@ -23,7 +23,7 @@ defmodule EspacoNeuroWeb.UserAuthTest do
     test "stores the user token in the session", %{conn: conn, user: user} do
       conn = UserAuth.log_in_user(conn, user)
       assert token = get_session(conn, :user_token)
-      assert redirected_to(conn) == ~p"/"
+      assert redirected_to(conn) == ~p"/admin"
       assert Accounts.get_user_by_session_token(token)
     end
 
@@ -213,7 +213,7 @@ defmodule EspacoNeuroWeb.UserAuthTest do
       assert redirected_to(conn) == ~p"/users/log-in"
 
       assert Phoenix.Flash.get(conn.assigns.flash, :error) ==
-               "You must re-authenticate to access this page."
+               "Você precisa se re-autenticar para acessar esta página."
     end
   end
 
@@ -229,7 +229,7 @@ defmodule EspacoNeuroWeb.UserAuthTest do
         |> UserAuth.redirect_if_user_is_authenticated([])
 
       assert conn.halted
-      assert redirected_to(conn) == ~p"/"
+      assert redirected_to(conn) == ~p"/admin"
     end
 
     test "does not redirect if user is not authenticated", %{conn: conn} do
@@ -251,7 +251,7 @@ defmodule EspacoNeuroWeb.UserAuthTest do
       assert redirected_to(conn) == ~p"/users/log-in"
 
       assert Phoenix.Flash.get(conn.assigns.flash, :error) ==
-               "You must log in to access this page."
+               "Você precisa fazer login para acessar esta página."
     end
 
     test "stores the path to redirect to on GET", %{conn: conn} do

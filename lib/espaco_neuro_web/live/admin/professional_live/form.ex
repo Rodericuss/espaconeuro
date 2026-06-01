@@ -9,66 +9,109 @@ defmodule EspacoNeuroWeb.Admin.ProfessionalLive.Form do
   def render(assigns) do
     ~H"""
     <Layouts.app flash={@flash}>
-      <.header>
-        {@page_title}
-      </.header>
+      <div class="admin-header">
+        <h1>{@page_title}</h1>
+      </div>
 
-      <.form for={@form} id="professional-form" phx-change="validate" phx-submit="save">
-        <.input field={@form[:name]} type="text" label="Nome" />
-        <.input
-          field={@form[:category]}
-          type="select"
-          label="Categoria"
-          options={[{"Psicologia", "psi"}, {"Neuropsicologia", "neuro"}, {"Pedagogia", "pedago"}]}
-        />
-        <.input field={@form[:profession]} type="text" label="Profissão (pill)" />
-        <.input field={@form[:crp]} type="text" label="Registro (CRP/CRFa)" />
-        <.input field={@form[:headline]} type="text" label="Headline (subtítulo teal)" />
-        <.input field={@form[:summary]} type="text" label="Resumo (card)" />
-        <.input field={@form[:description]} type="textarea" label="Bio completa (detalhe)" />
-        <.input field={@form[:approach]} type="text" label="Abordagem" />
-        <.input
-          field={@form[:specialties_input]}
-          type="text"
-          label="Especialidades (separar por vírgula)"
-          value={@specialties_input}
-        />
-        <.input
-          field={@form[:modalities_input]}
-          type="text"
-          label="Modalidades/tags (separar por vírgula)"
-          value={@modalities_input}
-        />
-        <.input field={@form[:whatsapp]} type="text" label="WhatsApp (só dígitos: 55DDDNÚMERO)" />
-        <.input field={@form[:email]} type="email" label="E-mail" />
-        <.input field={@form[:position]} type="number" label="Posição" />
-        <.input field={@form[:published]} type="checkbox" label="Publicado" />
+      <div class="admin-form-card">
+        <.form for={@form} id="professional-form" phx-change="validate" phx-submit="save">
+          <.input field={@form[:name]} type="text" label="Nome" />
+          <.input
+            field={@form[:category]}
+            type="select"
+            label="Categoria"
+            options={[{"Psicologia", "psi"}, {"Neuropsicologia", "neuro"}, {"Pedagogia", "pedago"}]}
+          />
+          <.input field={@form[:profession]} type="text" label="Profissão (pill)" />
+          <.input field={@form[:crp]} type="text" label="Registro (CRP/CRFa)" />
+          <.input field={@form[:headline]} type="text" label="Headline (subtítulo teal)" />
+          <.input field={@form[:summary]} type="text" label="Resumo (card)" />
+          <.input field={@form[:description]} type="textarea" label="Bio completa (detalhe)" />
+          <.input field={@form[:approach]} type="text" label="Abordagem" />
+          <.input
+            field={@form[:specialties_input]}
+            type="text"
+            label="Especialidades (separar por vírgula)"
+            value={@specialties_input}
+          />
+          <.input
+            field={@form[:modalities_input]}
+            type="text"
+            label="Modalidades/tags (separar por vírgula)"
+            value={@modalities_input}
+          />
+          <.input field={@form[:whatsapp]} type="text" label="WhatsApp (só dígitos: 55DDDNÚMERO)" />
+          <.input field={@form[:email]} type="email" label="E-mail" />
+          <.input field={@form[:position]} type="number" label="Posição" />
+          <.input field={@form[:published]} type="checkbox" label="Publicado" />
 
-        <div class="mt-4">
-          <label class="block text-sm font-semibold mb-2">Foto</label>
-          <.live_file_input upload={@uploads.photo} />
-          <div :for={entry <- @uploads.photo.entries} class="mt-2">
-            <.live_img_preview entry={entry} width="120" />
-            <p :for={err <- upload_errors(@uploads.photo, entry)} class="text-error text-sm">
-              {error_to_string(err)}
-            </p>
+          <div style="margin-top:20px;">
+            <span style="display:block;font-size:13px;font-weight:600;color:var(--navy-700);margin-bottom:10px;">
+              Foto do profissional
+            </span>
+
+            <div
+              phx-drop-target={@uploads.photo.ref}
+              style="position:relative;border:2px dashed var(--border-strong);border-radius:var(--radius-md);padding:32px 24px;text-align:center;transition:border-color .2s,background .2s;cursor:pointer;background:var(--n-50);"
+              onmouseover="this.style.borderColor='var(--teal-400)';this.style.background='rgba(116,197,198,0.05)'"
+              onmouseout="this.style.borderColor='var(--border-strong)';this.style.background='var(--n-50)'"
+            >
+              <div :if={@uploads.photo.entries == [] && !@professional.photo_path} style="display:flex;flex-direction:column;align-items:center;gap:8px;pointer-events:none;">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--navy-400)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="17 8 12 3 7 8" /><line x1="12" y1="3" x2="12" y2="15" />
+                </svg>
+                <span style="font-size:14px;color:var(--navy-700);font-weight:500;">
+                  Arraste uma imagem ou clique para selecionar
+                </span>
+                <span style="font-size:12px;color:var(--text-muted);">
+                  JPG, PNG ou WebP · Máx 2MB
+                </span>
+              </div>
+
+              <div :if={@professional.photo_path && @uploads.photo.entries == []} style="display:flex;align-items:center;gap:16px;justify-content:center;pointer-events:none;">
+                <img
+                  src={@professional.photo_path}
+                  alt={@professional.name}
+                  style="width:100px;height:100px;object-fit:cover;border-radius:var(--radius-md);border:2px solid var(--border);"
+                />
+                <div style="text-align:left;">
+                  <span style="font-size:14px;color:var(--navy-700);font-weight:500;display:block;">Foto atual</span>
+                  <span style="font-size:12px;color:var(--text-muted);">Arraste ou clique para substituir</span>
+                </div>
+              </div>
+
+              <div :for={entry <- @uploads.photo.entries} style="display:flex;align-items:center;gap:16px;justify-content:center;">
+                <.live_img_preview entry={entry} style="width:100px;height:100px;object-fit:cover;border-radius:var(--radius-md);border:2px solid var(--teal-300);" />
+                <div style="text-align:left;">
+                  <span style="font-size:14px;color:var(--navy-900);font-weight:500;display:block;">Nova foto selecionada</span>
+                  <span style="font-size:12px;color:var(--text-muted);">{entry.client_name}</span>
+                  <button
+                    type="button"
+                    phx-click="cancel-upload"
+                    phx-value-ref={entry.ref}
+                    style="display:block;margin-top:6px;font-size:12px;color:#dc2626;background:none;border:none;cursor:pointer;padding:0;font-weight:600;position:relative;z-index:2;"
+                  >
+                    Remover
+                  </button>
+                </div>
+              </div>
+
+              <.live_file_input upload={@uploads.photo} style="position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;z-index:1;" />
+            </div>
+
+            <%= for entry <- @uploads.photo.entries, err <- upload_errors(@uploads.photo, entry) do %>
+              <p style="color:#dc2626;font-size:13px;margin-top:6px;">{error_to_string(err)}</p>
+            <% end %>
           </div>
-          <p :if={@professional.photo_path} class="mt-2 text-sm">
-            Foto atual:
-            <img
-              src={@professional.photo_path}
-              alt={@professional.name}
-              width="80"
-              class="inline rounded"
-            />
-          </p>
-        </div>
 
-        <footer>
-          <.button phx-disable-with="Salvando..." variant="primary">Salvar</.button>
-          <.button navigate={~p"/admin/profissionais"}>Cancelar</.button>
-        </footer>
-      </.form>
+          <div style="display:flex;gap:12px;margin-top:28px;">
+            <button type="submit" class="btn btn-primary" phx-disable-with="Salvando...">
+              Salvar
+            </button>
+            <a href={~p"/admin/profissionais"} class="btn btn-ghost-light">Cancelar</a>
+          </div>
+        </.form>
+      </div>
     </Layouts.app>
     """
   end
@@ -116,9 +159,19 @@ defmodule EspacoNeuroWeb.Admin.ProfessionalLive.Form do
     {:noreply, assign(socket, form: to_form(changeset, action: :validate))}
   end
 
+  def handle_event("cancel-upload", %{"ref" => ref}, socket) do
+    {:noreply, cancel_upload(socket, :photo, ref)}
+  end
+
   def handle_event("save", %{"professional" => params}, socket) do
     params = parse_array_fields(params)
     photo_path = consume_photo(socket)
+    old_photo = socket.assigns.professional.photo_path
+
+    if photo_path && old_photo do
+      Upload.delete_object(old_photo)
+    end
+
     params = if photo_path, do: Map.put(params, "photo_path", photo_path), else: params
     save_professional(socket, socket.assigns.live_action, params)
   end

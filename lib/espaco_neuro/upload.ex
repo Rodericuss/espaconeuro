@@ -32,6 +32,20 @@ defmodule EspacoNeuro.Upload do
     {:ok, meta, socket}
   end
 
+  def delete_object(public_url) when is_binary(public_url) do
+    bucket = bucket()
+    prefix = "https://#{bucket}.s3.amazonaws.com/"
+
+    if String.starts_with?(public_url, prefix) do
+      key = String.replace_prefix(public_url, prefix, "")
+      ExAws.S3.delete_object(bucket, key) |> ExAws.request()
+    end
+
+    :ok
+  end
+
+  def delete_object(_), do: :ok
+
   def bucket do
     Application.get_env(:espaco_neuro, :s3_bucket) || "espaco-neuro-uploads"
   end

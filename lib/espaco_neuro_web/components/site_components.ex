@@ -130,9 +130,9 @@ defmodule EspacoNeuroWeb.SiteComponents do
       <div class="wrap nav-inner">
         <a href={~p"/"} class="nav-brand">
           <img
-            src={~p"/images/logo-espaco-neuro.png"}
+            src={~p"/images/logo-wordmark.png"}
             alt="Espaço Neuro"
-            style="height:38px;width:auto;"
+            style="height:52px;width:auto;"
           />
         </a>
         <nav class="nav-links">
@@ -143,7 +143,7 @@ defmodule EspacoNeuroWeb.SiteComponents do
           <a href="/#contato">Contato</a>
         </nav>
         <div class="nav-cta">
-          <a href="/#contato" class="btn btn-primary btn-sm">Agendar consulta</a>
+          <a href="/#contato" class="btn btn-primary">Agendar consulta</a>
         </div>
         <button class="nav-toggle" id="navToggle" aria-label="Menu" phx-click={toggle_mobile_menu()}>
           <span></span><span></span><span></span>
@@ -217,15 +217,16 @@ defmodule EspacoNeuroWeb.SiteComponents do
     ~H"""
     <section class="cta" id="contato">
       <div class="wrap" style="text-align:center;">
-        <h2 style="color:var(--n-50);font-size:clamp(28px,4vw,40px);">
-          Pronto para dar o próximo passo?
+        <span class="eyebrow on-dark" style="justify-content:center;">Vamos começar</span>
+        <h2 style="color:var(--n-50);font-size:clamp(32px,4.5vw,46px);margin-top:20px;">
+          O primeiro passo<br />pode ser hoje.
         </h2>
-        <p style="color:var(--navy-300);font-size:18px;margin:16px auto 32px;max-width:52ch;">
-          Entre em contato e agende sua avaliação ou sessão. Nosso atendimento é humano, acolhedor e baseado em evidências.
+        <p style="color:var(--navy-300);font-size:18px;margin:20px auto 36px;max-width:52ch;">
+          Conte para a gente o que está buscando. Retornamos em até um dia útil para encontrar o melhor caminho e profissional para você.
         </p>
         <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;">
           <a href="https://wa.me/5500000000000" class="btn btn-primary" target="_blank">
-            Agendar pelo WhatsApp
+            Falar no WhatsApp
           </a>
           <a href="mailto:contato@espaconeuro.com.br" class="btn btn-ghost-dark">Enviar e-mail</a>
         </div>

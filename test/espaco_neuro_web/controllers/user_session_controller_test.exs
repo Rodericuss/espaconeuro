@@ -26,12 +26,12 @@ defmodule EspacoNeuroWeb.UserSessionControllerTest do
         })
 
       assert get_session(conn, :user_token)
-      assert redirected_to(conn) == ~p"/"
+      assert redirected_to(conn) == ~p"/admin"
 
       conn = get(conn, ~p"/")
       response = html_response(conn, 200)
       assert response =~ user.email
-      assert response =~ ~p"/users/settings"
+      assert response =~ ~p"/admin"
       assert response =~ ~p"/users/log-out"
     end
 
@@ -46,7 +46,7 @@ defmodule EspacoNeuroWeb.UserSessionControllerTest do
         })
 
       assert conn.resp_cookies["_espaco_neuro_web_user_remember_me"]
-      assert redirected_to(conn) == ~p"/"
+      assert redirected_to(conn) == ~p"/admin"
     end
 
     test "emits error message with invalid credentials", %{conn: conn, user: user} do

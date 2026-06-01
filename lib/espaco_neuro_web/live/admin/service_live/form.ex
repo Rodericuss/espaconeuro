@@ -10,55 +10,73 @@ defmodule EspacoNeuroWeb.Admin.ServiceLive.Form do
   def render(assigns) do
     ~H"""
     <Layouts.app flash={@flash}>
-      <.header>
-        {@page_title}
-      </.header>
+      <div class="admin-header">
+        <h1>{@page_title}</h1>
+      </div>
 
-      <.form for={@form} id="service-form" phx-change="validate" phx-submit="save">
-        <.input field={@form[:title]} type="text" label="Título" />
-        <.input field={@form[:summary]} type="text" label="Resumo (card)" />
-        <.input field={@form[:description]} type="textarea" label="Descrição completa" />
-        <.input
-          field={@form[:icon]}
-          type="select"
-          label="Ícone"
-          options={Enum.map(@icons, &{&1, &1})}
-          prompt="Selecione..."
-        />
-        <.input
-          field={@form[:modality]}
-          type="select"
-          label="Modalidade"
-          options={[{"Presencial", "presencial"}, {"Online", "online"}, {"Ambos", "ambos"}]}
-        />
-        <.input field={@form[:price_cents]} type="number" label="Preço (centavos)" />
-        <.input
-          field={@form[:price_kind]}
-          type="select"
-          label="Tipo de preço"
-          options={[{"Fixo", "fixed"}, {"A partir de", "from"}, {"Sob consulta", "on_request"}]}
-        />
-        <.input field={@form[:position]} type="number" label="Posição" />
-        <.input field={@form[:published]} type="checkbox" label="Publicado" />
+      <div class="admin-form-card">
+        <.form for={@form} id="service-form" phx-change="validate" phx-submit="save">
+          <.input field={@form[:title]} type="text" label="Título" />
+          <.input field={@form[:summary]} type="text" label="Resumo (card)" />
+          <.input field={@form[:description]} type="textarea" label="Descrição completa" />
+          <.input
+            field={@form[:icon]}
+            type="select"
+            label="Ícone"
+            options={Enum.map(@icons, &{&1, &1})}
+            prompt="Selecione..."
+          />
+          <.input
+            field={@form[:modality]}
+            type="select"
+            label="Modalidade"
+            options={[{"Presencial", "presencial"}, {"Online", "online"}, {"Ambos", "ambos"}]}
+          />
+          <.input field={@form[:price_cents]} type="number" label="Preço (centavos)" />
+          <.input
+            field={@form[:price_kind]}
+            type="select"
+            label="Tipo de preço"
+            options={[{"Fixo", "fixed"}, {"A partir de", "from"}, {"Sob consulta", "on_request"}]}
+          />
+          <.input field={@form[:position]} type="number" label="Posição" />
+          <.input field={@form[:published]} type="checkbox" label="Publicado" />
 
-        <div class="mt-4">
-          <label class="block text-sm font-semibold mb-2">Profissionais vinculados</label>
-          <select name="professional_ids[]" multiple class="select select-bordered w-full h-32">
-            <option
-              :for={pro <- @professionals}
-              value={pro.id}
-              selected={pro.id in @selected_professional_ids}
-            >
-              {pro.name}
-            </option>
-          </select>
-        </div>
+          <div style="margin-top:16px;">
+            <span style="display:block;font-size:13px;font-weight:600;color:var(--navy-700);margin-bottom:10px;">
+              Profissionais vinculados
+            </span>
+            <input :if={@selected_professional_ids == []} type="hidden" name="professional_ids[]" value="" />
+            <div style="display:flex;flex-direction:column;gap:6px;">
+              <label
+                :for={pro <- @professionals}
+                style="display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--n-50);border:1.5px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;transition:border-color .15s,background .15s;"
+                onmouseover="this.style.borderColor='var(--teal-300)'"
+                onmouseout={"this.style.borderColor=this.querySelector('input').checked?'var(--teal-400)':'var(--border)'"}
+              >
+                <input
+                  type="checkbox"
+                  name="professional_ids[]"
+                  value={pro.id}
+                  checked={pro.id in @selected_professional_ids}
+                  style="width:18px;height:18px;accent-color:var(--teal-500);cursor:pointer;"
+                />
+                <div>
+                  <span style="font-size:14px;font-weight:500;color:var(--navy-900);">{pro.name}</span>
+                  <span style="font-size:12px;color:var(--text-muted);margin-left:8px;">{pro.profession}</span>
+                </div>
+              </label>
+            </div>
+          </div>
 
-        <footer>
-          <.button phx-disable-with="Salvando..." variant="primary">Salvar</.button>
-          <.button navigate={~p"/admin/servicos"}>Cancelar</.button>
-        </footer>
-      </.form>
+          <div style="display:flex;gap:12px;margin-top:28px;">
+            <button type="submit" class="btn btn-primary" phx-disable-with="Salvando...">
+              Salvar
+            </button>
+            <a href={~p"/admin/servicos"} class="btn btn-ghost-light">Cancelar</a>
+          </div>
+        </.form>
+      </div>
     </Layouts.app>
     """
   end
@@ -103,7 +121,11 @@ defmodule EspacoNeuroWeb.Admin.ServiceLive.Form do
 
   def handle_event("save", params, socket) do
     service_params = params["service"] || %{}
-    professional_ids = params["professional_ids"] || []
+
+    professional_ids =
+      (params["professional_ids"] || [])
+      |> Enum.reject(&(&1 == ""))
+
     save_service(socket, socket.assigns.live_action, service_params, professional_ids)
   end
 

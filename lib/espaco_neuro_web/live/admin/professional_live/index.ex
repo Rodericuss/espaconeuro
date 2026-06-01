@@ -7,37 +7,49 @@ defmodule EspacoNeuroWeb.Admin.ProfessionalLive.Index do
   def render(assigns) do
     ~H"""
     <Layouts.app flash={@flash}>
-      <.header>
-        Profissionais
-        <:actions>
-          <.button variant="primary" navigate={~p"/admin/profissionais/new"}>
-            <.icon name="hero-plus" /> Novo Profissional
-          </.button>
-        </:actions>
-      </.header>
+      <div class="admin-header">
+        <h1>Profissionais</h1>
+        <a href={~p"/admin/profissionais/new"} class="btn btn-primary">+ Novo Profissional</a>
+      </div>
 
-      <.table
-        id="professionals"
-        rows={@streams.professionals}
-        row_click={fn {_id, pro} -> JS.navigate(~p"/admin/profissionais/#{pro}") end}
-      >
-        <:col :let={{_id, pro}} label="Nome">{pro.name}</:col>
-        <:col :let={{_id, pro}} label="Categoria">{pro.category}</:col>
-        <:col :let={{_id, pro}} label="Profissão">{pro.profession}</:col>
-        <:col :let={{_id, pro}} label="Posição">{pro.position}</:col>
-        <:col :let={{_id, pro}} label="Publicado">{if pro.published, do: "Sim", else: "Não"}</:col>
-        <:action :let={{_id, pro}}>
-          <.link navigate={~p"/admin/profissionais/#{pro}/edit"}>Editar</.link>
-        </:action>
-        <:action :let={{id, pro}}>
-          <.link
-            phx-click={JS.push("delete", value: %{id: pro.id}) |> hide("##{id}")}
-            data-confirm="Tem certeza?"
-          >
-            Excluir
-          </.link>
-        </:action>
-      </.table>
+      <div class="admin-table-wrap"><table class="admin-table">
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th>Categoria</th>
+            <th>Profissão</th>
+            <th>Posição</th>
+            <th>Status</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody id="professionals" phx-update="stream">
+          <tr :for={{dom_id, pro} <- @streams.professionals} id={dom_id}>
+            <td style="font-weight:500;">{pro.name}</td>
+            <td>{format_category(pro.category)}</td>
+            <td>{pro.profession}</td>
+            <td>{pro.position}</td>
+            <td>
+              <span class={"admin-status #{if pro.published, do: "published", else: "draft"}"}>
+                {if pro.published, do: "Publicado", else: "Rascunho"}
+              </span>
+            </td>
+            <td>
+              <div class="actions">
+                <a href={~p"/admin/profissionais/#{pro}/edit"} class="edit-link">Editar</a>
+                <a
+                  href="#"
+                  phx-click={JS.push("delete", value: %{id: pro.id}) |> hide("##{dom_id}")}
+                  data-confirm="Tem certeza?"
+                  class="delete-link"
+                >
+                  Excluir
+                </a>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table></div>
     </Layouts.app>
     """
   end
@@ -57,4 +69,9 @@ defmodule EspacoNeuroWeb.Admin.ProfessionalLive.Index do
 
     {:noreply, stream_delete(socket, :professionals, professional)}
   end
+
+  defp format_category(:neuro), do: "Neuropsicologia"
+  defp format_category(:psi), do: "Psicologia"
+  defp format_category(:pedago), do: "Pedagogia"
+  defp format_category(_), do: "—"
 end

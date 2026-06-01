@@ -23,7 +23,7 @@ defmodule EspacoNeuroWeb.ServicoLive.Show do
     <section class="page-head">
       <div class="wrap">
         <a href={~p"/servicos"} class="back-link">← Serviços</a>
-        <div style="display:flex;align-items:center;gap:18px;margin-top:12px;">
+        <div class="svc-detail-header">
           <.service_icon icon={@service.icon} />
           <div>
             <h1>{@service.title}</h1>
@@ -38,8 +38,13 @@ defmodule EspacoNeuroWeb.ServicoLive.Show do
 
     <section class="section">
       <div class="wrap detail-content">
-        <div class="detail-body">
-          <p>{@service.description}</p>
+        <div class="svc-detail-body">
+          <div class="svc-detail-icon">
+            <.service_icon icon={@service.icon} />
+          </div>
+          <div class="detail-body">
+            <p>{@service.description}</p>
+          </div>
         </div>
       </div>
     </section>

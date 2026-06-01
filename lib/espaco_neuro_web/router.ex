@@ -56,7 +56,9 @@ defmodule EspacoNeuroWeb.Router do
   scope "/admin", EspacoNeuroWeb.Admin do
     pipe_through [:browser, :require_authenticated_user]
 
-    live_session :admin do
+    live_session :admin,
+      on_mount: [{EspacoNeuroWeb.UserAuth, :require_authenticated}] do
+      live "/", DashboardLive, :index
       live "/servicos", ServiceLive.Index, :index
       live "/servicos/new", ServiceLive.Form, :new
       live "/servicos/:id", ServiceLive.Show, :show

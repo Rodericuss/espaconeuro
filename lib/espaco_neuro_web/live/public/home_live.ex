@@ -4,7 +4,6 @@ defmodule EspacoNeuroWeb.HomeLive do
   import EspacoNeuroWeb.SiteComponents
 
   alias EspacoNeuro.Catalog
-  alias EspacoNeuro.Contact
 
   @impl true
   def mount(_params, _session, socket) do
@@ -15,26 +14,7 @@ defmodule EspacoNeuroWeb.HomeLive do
      socket
      |> assign(:page_title, "Início")
      |> assign(:services, services)
-     |> assign(:professionals, professionals)
-     |> assign(:contact_form, %{"name" => "", "email" => "", "phone" => "", "message" => ""})
-     |> assign(:contact_errors, [])
-     |> assign(:contact_sent, false)}
-  end
-
-  @impl true
-  def handle_event("send_contact", %{"contact" => params}, socket) do
-    if params["website"] && params["website"] != "" do
-      {:noreply, assign(socket, :contact_sent, true)}
-    else
-      case Contact.validate(params) do
-        :ok ->
-          Contact.send_contact_message(params)
-          {:noreply, socket |> assign(:contact_sent, true) |> assign(:contact_errors, [])}
-
-        {:error, errors} ->
-          {:noreply, assign(socket, :contact_errors, errors)}
-      end
-    end
+     |> assign(:professionals, professionals)}
   end
 
   @impl true
@@ -42,13 +22,13 @@ defmodule EspacoNeuroWeb.HomeLive do
     ~H"""
     <.site_navbar current="home" />
 
-    <section class="hero">
+    <section class="site-hero">
       <div class="wrap hero-grid">
         <div class="hero-copy">
           <span class="eyebrow on-dark">Clínica de neuropsicologia</span>
           <h1>Cuidado que respeita o <b>seu tempo</b> e o seu espaço.</h1>
           <p class="lead">
-            Avaliação e acompanhamento neuropsicológico humano, claro e baseado em evidências — para todas as idades, presencial ou online.
+            Avaliação e acompanhamento neuropsicológico humano, claro e baseado em evidências, para todas as idades, presencial ou online.
           </p>
           <div class="hero-btns">
             <a href="#contato" class="btn btn-primary">Agendar consulta</a>
@@ -63,7 +43,25 @@ defmodule EspacoNeuroWeb.HomeLive do
           </div>
         </div>
         <div class="hero-visual">
-          <div class="hero-photo"></div>
+          <img src={~p"/images/firstimage.jpg"} alt="Espaço Neuro" class="hero-img" />
+          <div class="hero-badge">
+            <div class="ic">
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" /><polyline points="22 4 12 14.01 9 11.01" />
+              </svg>
+            </div>
+            <div class="tx">
+              <strong>Atendimento ético</strong>
+              <span>Profissionais com registro ativo</span>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -131,7 +129,7 @@ defmodule EspacoNeuroWeb.HomeLive do
 
     <section class="section approach" id="abordagem">
       <div class="wrap approach-grid">
-        <div class="approach-photo"></div>
+        <img src={~p"/images/firstimage.jpg"} alt="Nossa abordagem" class="approach-photo" />
         <div>
           <span class="eyebrow">Nossa abordagem</span>
           <h2>Baseada em evidências, centrada em você</h2>
@@ -205,13 +203,15 @@ defmodule EspacoNeuroWeb.HomeLive do
           <h2>Profissionais dedicados ao seu bem-estar</h2>
         </div>
         <div class="tt-grid">
-          <div :for={pro <- @professionals} class="tt-card">
-            <div class="tt-photo-wrap">
-              <div class="tt-photo"></div>
+          <a :for={pro <- @professionals} href={~p"/equipe/#{pro.slug}"} class="tt-card">
+            <div class="tt-photo">
+              <img :if={pro.photo_path} src={pro.photo_path} alt={pro.name} />
             </div>
-            <h4>{pro.name}</h4>
-            <span class="tt-role">{pro.profession}</span>
-          </div>
+            <div class="tt-body">
+              <h4>{pro.name}</h4>
+              <span class="tt-role">{pro.profession}</span>
+            </div>
+          </a>
         </div>
         <div style="text-align:center;margin-top:40px;">
           <a href={~p"/equipe"} class="btn btn-navy">Conhecer toda a equipe</a>
@@ -220,74 +220,20 @@ defmodule EspacoNeuroWeb.HomeLive do
     </section>
 
     <section class="cta" id="contato">
-      <div class="wrap" style="max-width:600px;margin:0 auto;">
-        <h2 style="color:var(--n-50);font-size:clamp(28px,4vw,40px);text-align:center;">
-          Entre em contato
+      <div class="wrap" style="text-align:center;">
+        <span class="eyebrow on-dark" style="justify-content:center;">Vamos começar</span>
+        <h2 style="color:var(--n-50);font-size:clamp(32px,4.5vw,46px);margin-top:20px;">
+          O primeiro passo<br />pode ser hoje.
         </h2>
-        <p style="color:var(--navy-300);font-size:18px;margin:16px auto 32px;text-align:center;max-width:52ch;">
-          Envie sua mensagem ou agende pelo WhatsApp. Respondemos em até 24h.
+        <p style="color:var(--navy-300);font-size:18px;margin:20px auto 36px;max-width:52ch;">
+          Conte para a gente o que está buscando. Retornamos em até um dia útil para encontrar o melhor caminho e profissional para você.
         </p>
-
-        <div
-          :if={@contact_sent}
-          style="background:var(--teal-500);color:white;padding:20px;border-radius:12px;text-align:center;margin-bottom:24px;"
-        >
-          <p style="font-weight:600;font-size:18px;">Mensagem enviada!</p>
-          <p>Entraremos em contato em breve.</p>
-        </div>
-
-        <.form
-          :if={!@contact_sent}
-          for={%{}}
-          as={:contact}
-          phx-submit="send_contact"
-          style="display:flex;flex-direction:column;gap:16px;"
-        >
-          <div :for={{field, msg} <- @contact_errors} style="color:#f87171;font-size:14px;">
-            {field}: {msg}
-          </div>
-          <input
-            type="text"
-            name="contact[website]"
-            style="display:none"
-            tabindex="-1"
-            autocomplete="off"
-          />
-          <input
-            type="text"
-            name="contact[name]"
-            placeholder="Seu nome"
-            required
-            style="padding:12px 16px;border-radius:8px;border:1px solid var(--navy-200);font-size:16px;"
-          />
-          <input
-            type="email"
-            name="contact[email]"
-            placeholder="Seu e-mail"
-            required
-            style="padding:12px 16px;border-radius:8px;border:1px solid var(--navy-200);font-size:16px;"
-          />
-          <input
-            type="tel"
-            name="contact[phone]"
-            placeholder="Telefone (opcional)"
-            style="padding:12px 16px;border-radius:8px;border:1px solid var(--navy-200);font-size:16px;"
-          />
-          <textarea
-            name="contact[message]"
-            placeholder="Sua mensagem"
-            required
-            rows="4"
-            style="padding:12px 16px;border-radius:8px;border:1px solid var(--navy-200);font-size:16px;resize:vertical;"
-          />
-          <button type="submit" class="btn btn-primary" style="align-self:center;">
-            Enviar mensagem
-          </button>
-        </.form>
-
-        <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:24px;">
-          <a href="https://wa.me/5500000000000" class="btn btn-ghost-dark" target="_blank">
-            Ou agende pelo WhatsApp
+        <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;">
+          <a href="https://wa.me/5500000000000" class="btn btn-primary" target="_blank">
+            Falar no WhatsApp
+          </a>
+          <a href="mailto:contato@espaconeuro.com.br" class="btn btn-ghost-dark">
+            Enviar e-mail
           </a>
         </div>
       </div>

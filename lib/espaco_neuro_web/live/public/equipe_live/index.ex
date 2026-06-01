@@ -18,6 +18,10 @@ defmodule EspacoNeuroWeb.EquipeLive.Index do
   end
 
   @impl true
+  def handle_event("filter-select", %{"cat" => cat}, socket) do
+    handle_event("filter", %{"cat" => cat}, socket)
+  end
+
   def handle_event("filter", %{"cat" => cat}, socket) do
     professionals =
       if cat == "all" do
@@ -46,9 +50,9 @@ defmodule EspacoNeuroWeb.EquipeLive.Index do
       </div>
     </section>
 
-    <section class="section filter-bar">
+    <section class="filter-bar">
       <div class="wrap">
-        <div class="chip-group">
+        <div class="chip-group filter-desktop">
           <button
             phx-click="filter"
             phx-value-cat="all"
@@ -78,6 +82,20 @@ defmodule EspacoNeuroWeb.EquipeLive.Index do
             Pedagogia
           </button>
         </div>
+        <form class="filter-mobile" phx-change="filter-select">
+          <span class="filter-label">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" />
+            </svg>
+            Filtrar por:
+          </span>
+          <select name="cat" class="filter-select">
+            <option value="all" selected={@current_filter == "all"}>Todos</option>
+            <option value="neuro" selected={@current_filter == "neuro"}>Neuropsicologia</option>
+            <option value="psi" selected={@current_filter == "psi"}>Psicologia</option>
+            <option value="pedago" selected={@current_filter == "pedago"}>Pedagogia</option>
+          </select>
+        </form>
         <span class="count" id="count">{@count} profissionais</span>
       </div>
     </section>

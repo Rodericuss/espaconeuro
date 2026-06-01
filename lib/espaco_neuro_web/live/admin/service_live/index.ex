@@ -7,39 +7,49 @@ defmodule EspacoNeuroWeb.Admin.ServiceLive.Index do
   def render(assigns) do
     ~H"""
     <Layouts.app flash={@flash}>
-      <.header>
-        Serviços
-        <:actions>
-          <.button variant="primary" navigate={~p"/admin/servicos/new"}>
-            <.icon name="hero-plus" /> Novo Serviço
-          </.button>
-        </:actions>
-      </.header>
+      <div class="admin-header">
+        <h1>Serviços</h1>
+        <a href={~p"/admin/servicos/new"} class="btn btn-primary">+ Novo Serviço</a>
+      </div>
 
-      <.table
-        id="services"
-        rows={@streams.services}
-        row_click={fn {_id, service} -> JS.navigate(~p"/admin/servicos/#{service}") end}
-      >
-        <:col :let={{_id, service}} label="Título">{service.title}</:col>
-        <:col :let={{_id, service}} label="Modalidade">{service.modality}</:col>
-        <:col :let={{_id, service}} label="Preço">{format_price(service)}</:col>
-        <:col :let={{_id, service}} label="Posição">{service.position}</:col>
-        <:col :let={{_id, service}} label="Publicado">
-          {if service.published, do: "Sim", else: "Não"}
-        </:col>
-        <:action :let={{_id, service}}>
-          <.link navigate={~p"/admin/servicos/#{service}/edit"}>Editar</.link>
-        </:action>
-        <:action :let={{id, service}}>
-          <.link
-            phx-click={JS.push("delete", value: %{id: service.id}) |> hide("##{id}")}
-            data-confirm="Tem certeza?"
-          >
-            Excluir
-          </.link>
-        </:action>
-      </.table>
+      <div class="admin-table-wrap"><table class="admin-table">
+        <thead>
+          <tr>
+            <th>Título</th>
+            <th>Modalidade</th>
+            <th>Preço</th>
+            <th>Posição</th>
+            <th>Status</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody id="services" phx-update="stream">
+          <tr :for={{dom_id, service} <- @streams.services} id={dom_id}>
+            <td style="font-weight:500;">{service.title}</td>
+            <td>{format_modality(service.modality)}</td>
+            <td>{format_price(service)}</td>
+            <td>{service.position}</td>
+            <td>
+              <span class={"admin-status #{if service.published, do: "published", else: "draft"}"}>
+                {if service.published, do: "Publicado", else: "Rascunho"}
+              </span>
+            </td>
+            <td>
+              <div class="actions">
+                <a href={~p"/admin/servicos/#{service}/edit"} class="edit-link">Editar</a>
+                <a
+                  href="#"
+                  phx-click={JS.push("delete", value: %{id: service.id}) |> hide("##{dom_id}")}
+                  data-confirm="Tem certeza?"
+                  class="delete-link"
+                >
+                  Excluir
+                </a>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table></div>
     </Layouts.app>
     """
   end
@@ -68,4 +78,9 @@ defmodule EspacoNeuroWeb.Admin.ServiceLive.Index do
 
   defp format_cents(nil), do: "—"
   defp format_cents(cents), do: :erlang.float_to_binary(cents / 100, decimals: 2)
+
+  defp format_modality(:presencial), do: "Presencial"
+  defp format_modality(:online), do: "Online"
+  defp format_modality(:ambos), do: "Presencial e Online"
+  defp format_modality(_), do: "—"
 end
