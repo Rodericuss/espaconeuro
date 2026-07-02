@@ -201,7 +201,7 @@ defmodule EspacoNeuroWeb.SiteComponents do
             <h4>Contato</h4>
             <ul>
               <li><a href="mailto:contato@espaconeuro.com.br">profissionalvmb@gmail.com</a></li>
-              <li>Londrina · PR</li>
+              <li>Rua Pará, 1531 - Centro, Londrina - PR, 86010-450, sala 602</li>
             </ul>
           </div>
         </div>
