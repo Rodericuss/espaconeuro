@@ -26,7 +26,9 @@ defmodule EspacoNeuroWeb.HomeLive do
       <div class="wrap hero-grid">
         <div class="hero-copy">
           <span class="eyebrow on-dark">CLÍNICA ESPECIALIZADA EM NEUROPSICOLOGIA </span>
-          <h1>Entendendo antes de <b>tratar </b>Cuidando depois de <b>compreender</b></h1>
+          <h1>
+            Entendendo antes de <b>tratar</b> <br /> Cuidando depois de <b>compreender</b>
+          </h1>
           <p class="lead">
             Avaliações neuropsicológicas completas e acompanhamento terapêutico para crianças, adolescentes, adultos e idosos, com atendimento baseado em evidências científicas, ética e cuidado individualizado.
           </p>
