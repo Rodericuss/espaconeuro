@@ -20,7 +20,8 @@ defmodule EspacoNeuro.Upload do
         ]
       )
 
-    public_url = "https://#{bucket}.s3.amazonaws.com/#{key}"
+    region = Application.get_env(:ex_aws, :region, "sa-east-1")
+    public_url = "https://#{bucket}.s3.#{region}.amazonaws.com/#{key}"
 
     meta = %{
       uploader: "S3",
@@ -34,7 +35,8 @@ defmodule EspacoNeuro.Upload do
 
   def delete_object(public_url) when is_binary(public_url) do
     bucket = bucket()
-    prefix = "https://#{bucket}.s3.amazonaws.com/"
+    region = Application.get_env(:ex_aws, :region, "sa-east-1")
+    prefix = "https://#{bucket}.s3.#{region}.amazonaws.com/"
 
     if String.starts_with?(public_url, prefix) do
       key = String.replace_prefix(public_url, prefix, "")
@@ -47,6 +49,6 @@ defmodule EspacoNeuro.Upload do
   def delete_object(_), do: :ok
 
   def bucket do
-    Application.get_env(:espaco_neuro, :s3_bucket) || "espaco-neuro-uploads"
+    Application.get_env(:espaco_neuro, :s3_bucket) || "espaconeuro-assets"
   end
 end

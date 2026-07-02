@@ -35,3 +35,5 @@ espaco_neuro-*.tar
 npm-debug.log
 /assets/node_modules/
 
+# Environment variables (secrets)
+.env

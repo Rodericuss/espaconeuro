@@ -17,6 +17,8 @@ defmodule EspacoNeuroWeb.Router do
     plug :accepts, ["json"]
   end
 
+  get "/healthz", EspacoNeuroWeb.HealthController, :index
+
   scope "/", EspacoNeuroWeb do
     pipe_through :browser
 

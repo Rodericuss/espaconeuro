@@ -56,9 +56,26 @@ defmodule EspacoNeuroWeb.Admin.ProfessionalLive.Form do
               onmouseover="this.style.borderColor='var(--teal-400)';this.style.background='rgba(116,197,198,0.05)'"
               onmouseout="this.style.borderColor='var(--border-strong)';this.style.background='var(--n-50)'"
             >
-              <div :if={@uploads.photo.entries == [] && !@professional.photo_path} style="display:flex;flex-direction:column;align-items:center;gap:8px;pointer-events:none;">
-                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--navy-400)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="17 8 12 3 7 8" /><line x1="12" y1="3" x2="12" y2="15" />
+              <div
+                :if={@uploads.photo.entries == [] && !@professional.photo_path}
+                style="display:flex;flex-direction:column;align-items:center;gap:8px;pointer-events:none;"
+              >
+                <svg
+                  width="40"
+                  height="40"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="var(--navy-400)"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="17 8 12 3 7 8" /><line
+                    x1="12"
+                    y1="3"
+                    x2="12"
+                    y2="15"
+                  />
                 </svg>
                 <span style="font-size:14px;color:var(--navy-700);font-weight:500;">
                   Arraste uma imagem ou clique para selecionar
@@ -68,22 +85,37 @@ defmodule EspacoNeuroWeb.Admin.ProfessionalLive.Form do
                 </span>
               </div>
 
-              <div :if={@professional.photo_path && @uploads.photo.entries == []} style="display:flex;align-items:center;gap:16px;justify-content:center;pointer-events:none;">
+              <div
+                :if={@professional.photo_path && @uploads.photo.entries == []}
+                style="display:flex;align-items:center;gap:16px;justify-content:center;pointer-events:none;"
+              >
                 <img
                   src={@professional.photo_path}
                   alt={@professional.name}
                   style="width:100px;height:100px;object-fit:cover;border-radius:var(--radius-md);border:2px solid var(--border);"
                 />
                 <div style="text-align:left;">
-                  <span style="font-size:14px;color:var(--navy-700);font-weight:500;display:block;">Foto atual</span>
-                  <span style="font-size:12px;color:var(--text-muted);">Arraste ou clique para substituir</span>
+                  <span style="font-size:14px;color:var(--navy-700);font-weight:500;display:block;">
+                    Foto atual
+                  </span>
+                  <span style="font-size:12px;color:var(--text-muted);">
+                    Arraste ou clique para substituir
+                  </span>
                 </div>
               </div>
 
-              <div :for={entry <- @uploads.photo.entries} style="display:flex;align-items:center;gap:16px;justify-content:center;">
-                <.live_img_preview entry={entry} style="width:100px;height:100px;object-fit:cover;border-radius:var(--radius-md);border:2px solid var(--teal-300);" />
+              <div
+                :for={entry <- @uploads.photo.entries}
+                style="display:flex;align-items:center;gap:16px;justify-content:center;"
+              >
+                <.live_img_preview
+                  entry={entry}
+                  style="width:100px;height:100px;object-fit:cover;border-radius:var(--radius-md);border:2px solid var(--teal-300);"
+                />
                 <div style="text-align:left;">
-                  <span style="font-size:14px;color:var(--navy-900);font-weight:500;display:block;">Nova foto selecionada</span>
+                  <span style="font-size:14px;color:var(--navy-900);font-weight:500;display:block;">
+                    Nova foto selecionada
+                  </span>
                   <span style="font-size:12px;color:var(--text-muted);">{entry.client_name}</span>
                   <button
                     type="button"
@@ -96,7 +128,10 @@ defmodule EspacoNeuroWeb.Admin.ProfessionalLive.Form do
                 </div>
               </div>
 
-              <.live_file_input upload={@uploads.photo} style="position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;z-index:1;" />
+              <.live_file_input
+                upload={@uploads.photo}
+                style="position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;z-index:1;"
+              />
             </div>
 
             <%= for entry <- @uploads.photo.entries, err <- upload_errors(@uploads.photo, entry) do %>

@@ -200,8 +200,8 @@ defmodule EspacoNeuroWeb.SiteComponents do
           <div>
             <h4>Contato</h4>
             <ul>
-              <li><a href="mailto:contato@espaconeuro.com.br">contato@espaconeuro.com.br</a></li>
-              <li>São Paulo · SP</li>
+              <li><a href="mailto:contato@espaconeuro.com.br">profissionalvmb@gmail.com</a></li>
+              <li>Londrina · PR</li>
             </ul>
           </div>
         </div>
@@ -225,7 +225,11 @@ defmodule EspacoNeuroWeb.SiteComponents do
           Conte para a gente o que está buscando. Retornamos em até um dia útil para encontrar o melhor caminho e profissional para você.
         </p>
         <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;">
-          <a href="https://wa.me/5500000000000" class="btn btn-primary" target="_blank">
+          <a
+            href="https://wa.me/5543999721540?text=Ol%C3%A1.%20Gostaria%20de%20conhecer%20mais%20sobre%20a%20Espa%C3%A7o%20Neuro."
+            class="btn btn-primary"
+            target="_blank"
+          >
             Falar no WhatsApp
           </a>
           <a href="mailto:contato@espaconeuro.com.br" class="btn btn-ghost-dark">Enviar e-mail</a>

@@ -46,13 +46,18 @@ defmodule EspacoNeuroWeb.Admin.ServiceLive.Form do
             <span style="display:block;font-size:13px;font-weight:600;color:var(--navy-700);margin-bottom:10px;">
               Profissionais vinculados
             </span>
-            <input :if={@selected_professional_ids == []} type="hidden" name="professional_ids[]" value="" />
+            <input
+              :if={@selected_professional_ids == []}
+              type="hidden"
+              name="professional_ids[]"
+              value=""
+            />
             <div style="display:flex;flex-direction:column;gap:6px;">
               <label
                 :for={pro <- @professionals}
                 style="display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--n-50);border:1.5px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;transition:border-color .15s,background .15s;"
                 onmouseover="this.style.borderColor='var(--teal-300)'"
-                onmouseout={"this.style.borderColor=this.querySelector('input').checked?'var(--teal-400)':'var(--border)'"}
+                onmouseout="this.style.borderColor=this.querySelector('input').checked?'var(--teal-400)':'var(--border)'"
               >
                 <input
                   type="checkbox"
@@ -62,8 +67,12 @@ defmodule EspacoNeuroWeb.Admin.ServiceLive.Form do
                   style="width:18px;height:18px;accent-color:var(--teal-500);cursor:pointer;"
                 />
                 <div>
-                  <span style="font-size:14px;font-weight:500;color:var(--navy-900);">{pro.name}</span>
-                  <span style="font-size:12px;color:var(--text-muted);margin-left:8px;">{pro.profession}</span>
+                  <span style="font-size:14px;font-weight:500;color:var(--navy-900);">
+                    {pro.name}
+                  </span>
+                  <span style="font-size:12px;color:var(--text-muted);margin-left:8px;">
+                    {pro.profession}
+                  </span>
                 </div>
               </label>
             </div>

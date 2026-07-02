@@ -25,25 +25,23 @@ defmodule EspacoNeuroWeb.HomeLive do
     <section class="site-hero">
       <div class="wrap hero-grid">
         <div class="hero-copy">
-          <span class="eyebrow on-dark">Clínica de neuropsicologia</span>
-          <h1>Cuidado que respeita o <b>seu tempo</b> e o seu espaço.</h1>
+          <span class="eyebrow on-dark">CLÍNICA ESPECIALIZADA EM NEUROPSICOLOGIA </span>
+          <h1>Entendendo antes de <b>tratar </b>Cuidando depois de <b>compreender</b></h1>
           <p class="lead">
-            Avaliação e acompanhamento neuropsicológico humano, claro e baseado em evidências, para todas as idades, presencial ou online.
+            Avaliações neuropsicológicas completas e acompanhamento terapêutico para crianças, adolescentes, adultos e idosos, com atendimento baseado em evidências científicas, ética e cuidado individualizado.
           </p>
           <div class="hero-btns">
-            <a href="#contato" class="btn btn-primary">Agendar consulta</a>
-            <a href={~p"/equipe"} class="btn btn-ghost-dark">Conhecer a equipe</a>
+            <a href="#contato" class="btn btn-primary">Agendar avaliação</a>
+            <a href={~p"/servicos"} class="btn btn-ghost-dark">Conhecer nossos serviços</a>
           </div>
           <div class="hero-trust">
             <div class="ti">
-              <span class="num">+500</span><span class="lab">Pacientes atendidos</span>
+              <span class="num">+10.000</span><span class="lab">Pacientes atendidos</span>
             </div>
-            <div class="ti"><span class="num">9</span><span class="lab">Profissionais</span></div>
-            <div class="ti"><span class="num">3</span><span class="lab">Áreas de atuação</span></div>
           </div>
         </div>
         <div class="hero-visual">
-          <img src={~p"/images/firstimage.jpg"} alt="Espaço Neuro" class="hero-img" />
+          <img src={~p"/images/heroimageduo.jpeg"} alt="Espaço Neuro" class="hero-img" />
           <div class="hero-badge">
             <div class="ic">
               <svg
@@ -58,8 +56,8 @@ defmodule EspacoNeuroWeb.HomeLive do
               </svg>
             </div>
             <div class="tx">
-              <strong>Atendimento ético</strong>
-              <span>Profissionais com registro ativo</span>
+              <strong>Experiência clínica</strong>
+              <span>Equipe com +30 anos de trajetória profissional</span>
             </div>
           </div>
         </div>
@@ -115,8 +113,8 @@ defmodule EspacoNeuroWeb.HomeLive do
     <section class="section" id="servicos">
       <div class="wrap">
         <div class="section-head">
-          <span class="eyebrow">Nossos serviços</span>
-          <h2>Como podemos ajudar</h2>
+          <span class="eyebrow">Cuidado especializado em todas as etapas</span>
+          <h2>Em que podemos ajudar você</h2>
         </div>
         <div class="svc-grid">
           <.service_card :for={service <- @services} service={service} />
@@ -129,12 +127,12 @@ defmodule EspacoNeuroWeb.HomeLive do
 
     <section class="section approach" id="abordagem">
       <div class="wrap approach-grid">
-        <img src={~p"/images/firstimage.jpg"} alt="Nossa abordagem" class="approach-photo" />
+        <img src={~p"/images/secondimagefit.jpeg"} alt="Nossa abordagem" class="approach-photo" />
         <div>
           <span class="eyebrow">Nossa abordagem</span>
-          <h2>Baseada em evidências, centrada em você</h2>
+          <h2>Ciência, ética e cuidado em cada etapa do atendimento.</h2>
           <p style="color:var(--text-muted);margin:16px 0 28px;">
-            Acreditamos que cada pessoa é única. Por isso, nosso atendimento combina rigor científico com sensibilidade humana.
+            Cada paciente possui uma história única. Por isso, nossas decisões clínicas não são baseadas apenas em sintomas, mas em uma avaliação completa que considera aspectos cognitivos, emocionais, comportamentais e funcionais. Esse processo permite oferecer um cuidado ético, preciso e verdadeiramente individualizado.
           </p>
           <ul class="feat-list">
             <li>
@@ -152,7 +150,9 @@ defmodule EspacoNeuroWeb.HomeLive do
               </div>
               <div>
                 <h4>Avaliação completa</h4>
-                <p>Protocolos validados cientificamente para cada faixa etária.</p>
+                <p>
+                  Utilizamos instrumentos validados e práticas fundamentadas na ciência para garantir avaliações e intervenções confiáveis.
+                </p>
               </div>
             </li>
             <li>
@@ -170,7 +170,9 @@ defmodule EspacoNeuroWeb.HomeLive do
               </div>
               <div>
                 <h4>Devolutiva clara</h4>
-                <p>Laudos acessíveis, com orientações práticas para a família e a escola.</p>
+                <p>
+                  Laudos acessíveis, com orientações práticas para a família e a escola. Cada conclusão é construída a partir da integração entre testes, entrevistas, observação clínica e análise especializada.
+                </p>
               </div>
             </li>
             <li>
@@ -187,8 +189,10 @@ defmodule EspacoNeuroWeb.HomeLive do
                 </svg>
               </div>
               <div>
-                <h4>Acompanhamento contínuo</h4>
-                <p>Planos de intervenção que evoluem com você.</p>
+                <h4>Excelência técnica</h4>
+                <p>
+                  Um cuidado construído para cada paciente, com intervenções individualizadas, embasamento científico e profissionais com mais de trinta anos de experiência.
+                </p>
               </div>
             </li>
           </ul>
@@ -229,10 +233,14 @@ defmodule EspacoNeuroWeb.HomeLive do
           Conte para a gente o que está buscando. Retornamos em até um dia útil para encontrar o melhor caminho e profissional para você.
         </p>
         <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;">
-          <a href="https://wa.me/5500000000000" class="btn btn-primary" target="_blank">
+          <a
+            href="https://wa.me/5543999721540?text=Ol%C3%A1.%20Gostaria%20de%20conhecer%20mais%20sobre%20a%20Espa%C3%A7o%20Neuro."
+            class="btn btn-primary"
+            target="_blank"
+          >
             Falar no WhatsApp
           </a>
-          <a href="mailto:contato@espaconeuro.com.br" class="btn btn-ghost-dark">
+          <a href="mailto:profissionalvmb@gmail.com" class="btn btn-ghost-dark">
             Enviar e-mail
           </a>
         </div>

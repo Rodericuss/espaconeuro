@@ -5,10 +5,16 @@
       <p>Acesso restrito ao administrador</p>
     </div>
 
-    <p :if={Phoenix.Flash.get(@flash, :error)} style="background:#fef2f2;color:#dc2626;padding:10px 14px;border-radius:8px;font-size:14px;margin-bottom:16px;">
+    <p
+      :if={Phoenix.Flash.get(@flash, :error)}
+      style="background:#fef2f2;color:#dc2626;padding:10px 14px;border-radius:8px;font-size:14px;margin-bottom:16px;"
+    >
       {Phoenix.Flash.get(@flash, :error)}
     </p>
-    <p :if={Phoenix.Flash.get(@flash, :info)} style="background:var(--teal-50);color:var(--teal-700);padding:10px 14px;border-radius:8px;font-size:14px;margin-bottom:16px;">
+    <p
+      :if={Phoenix.Flash.get(@flash, :info)}
+      style="background:var(--teal-50);color:var(--teal-700);padding:10px 14px;border-radius:8px;font-size:14px;margin-bottom:16px;"
+    >
       {Phoenix.Flash.get(@flash, :info)}
     </p>
 

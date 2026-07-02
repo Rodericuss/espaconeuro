@@ -225,7 +225,10 @@ defmodule EspacoNeuroWeb.UserAuth do
     else
       socket =
         socket
-        |> Phoenix.LiveView.put_flash(:error, "Você precisa fazer login para acessar esta página.")
+        |> Phoenix.LiveView.put_flash(
+          :error,
+          "Você precisa fazer login para acessar esta página."
+        )
         |> Phoenix.LiveView.redirect(to: ~p"/users/log-in")
 
       {:halt, socket}

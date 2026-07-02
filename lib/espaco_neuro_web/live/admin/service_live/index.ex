@@ -12,44 +12,46 @@ defmodule EspacoNeuroWeb.Admin.ServiceLive.Index do
         <a href={~p"/admin/servicos/new"} class="btn btn-primary">+ Novo Serviço</a>
       </div>
 
-      <div class="admin-table-wrap"><table class="admin-table">
-        <thead>
-          <tr>
-            <th>Título</th>
-            <th>Modalidade</th>
-            <th>Preço</th>
-            <th>Posição</th>
-            <th>Status</th>
-            <th>Ações</th>
-          </tr>
-        </thead>
-        <tbody id="services" phx-update="stream">
-          <tr :for={{dom_id, service} <- @streams.services} id={dom_id}>
-            <td style="font-weight:500;">{service.title}</td>
-            <td>{format_modality(service.modality)}</td>
-            <td>{format_price(service)}</td>
-            <td>{service.position}</td>
-            <td>
-              <span class={"admin-status #{if service.published, do: "published", else: "draft"}"}>
-                {if service.published, do: "Publicado", else: "Rascunho"}
-              </span>
-            </td>
-            <td>
-              <div class="actions">
-                <a href={~p"/admin/servicos/#{service}/edit"} class="edit-link">Editar</a>
-                <a
-                  href="#"
-                  phx-click={JS.push("delete", value: %{id: service.id}) |> hide("##{dom_id}")}
-                  data-confirm="Tem certeza?"
-                  class="delete-link"
-                >
-                  Excluir
-                </a>
-              </div>
-            </td>
-          </tr>
-        </tbody>
-      </table></div>
+      <div class="admin-table-wrap">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Título</th>
+              <th>Modalidade</th>
+              <th>Preço</th>
+              <th>Posição</th>
+              <th>Status</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody id="services" phx-update="stream">
+            <tr :for={{dom_id, service} <- @streams.services} id={dom_id}>
+              <td style="font-weight:500;">{service.title}</td>
+              <td>{format_modality(service.modality)}</td>
+              <td>{format_price(service)}</td>
+              <td>{service.position}</td>
+              <td>
+                <span class={"admin-status #{if service.published, do: "published", else: "draft"}"}>
+                  {if service.published, do: "Publicado", else: "Rascunho"}
+                </span>
+              </td>
+              <td>
+                <div class="actions">
+                  <a href={~p"/admin/servicos/#{service}/edit"} class="edit-link">Editar</a>
+                  <a
+                    href="#"
+                    phx-click={JS.push("delete", value: %{id: service.id}) |> hide("##{dom_id}")}
+                    data-confirm="Tem certeza?"
+                    class="delete-link"
+                  >
+                    Excluir
+                  </a>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </Layouts.app>
     """
   end

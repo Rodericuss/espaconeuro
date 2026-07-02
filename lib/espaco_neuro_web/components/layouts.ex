@@ -48,7 +48,11 @@ defmodule EspacoNeuroWeb.Layouts do
         </nav>
         <div class="admin-nav-right">
           <a href={~p"/"} target="_blank" class="admin-site-link">Ver site →</a>
-          <button class="admin-toggle" onclick="document.getElementById('adminMenu').style.display = document.getElementById('adminMenu').style.display === 'none' ? 'block' : 'none'" aria-label="Menu">
+          <button
+            class="admin-toggle"
+            onclick="document.getElementById('adminMenu').style.display = document.getElementById('adminMenu').style.display === 'none' ? 'block' : 'none'"
+            aria-label="Menu"
+          >
             <span></span><span></span><span></span>
           </button>
         </div>
