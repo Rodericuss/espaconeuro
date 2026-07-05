@@ -130,6 +130,19 @@ defmodule EspacoNeuro.CatalogTest do
       assert professional.published == true
     end
 
+    test "create_professional/1 allows missing crp" do
+      valid_attrs = %{
+        name: "Dra. Helena Marques",
+        category: :neuro,
+        profession: "Neuropsicóloga",
+        headline: "Avaliação e reabilitação cognitiva",
+        description: "Bio completa"
+      }
+
+      assert {:ok, %Professional{} = professional} = Catalog.create_professional(valid_attrs)
+      assert professional.crp == nil
+    end
+
     test "create_professional/1 with invalid data returns error changeset" do
       assert {:error, %Ecto.Changeset{}} = Catalog.create_professional(@invalid_attrs)
     end

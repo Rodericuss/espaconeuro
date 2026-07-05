@@ -27,9 +27,10 @@ defmodule EspacoNeuro.Catalog.Professional do
     timestamps(type: :utc_datetime)
   end
 
-  @required_fields [:name, :category, :profession, :crp, :headline, :description]
+  @required_fields [:name, :category, :profession, :headline, :description]
   @optional_fields [
     :slug,
+    :crp,
     :summary,
     :approach,
     :specialties,

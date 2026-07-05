@@ -79,7 +79,7 @@ defmodule EspacoNeuroWeb.SiteComponents do
       </div>
       <div class="pro-body">
         <h3 class="pro-name">{@professional.name}</h3>
-        <span class="pro-crp">{@professional.crp}</span>
+        <span :if={@professional.crp} class="pro-crp">{@professional.crp}</span>
         <div class="pro-title">{@professional.headline}</div>
         <p class="pro-desc">
           {@professional.summary || String.slice(@professional.description, 0, 150) <> "..."}
