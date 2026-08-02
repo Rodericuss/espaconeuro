@@ -1,6 +1,9 @@
 defmodule EspacoNeuroWeb.SiteComponents do
-  use Phoenix.Component
-  use EspacoNeuroWeb, :verified_routes
+  use EspacoNeuroWeb, :html
+
+  @specialties_character_budget 132
+  @modalities_character_budget 30
+  @more_tag_cost String.length("E mais") + 2
 
   @icons %{
     "brain" =>
@@ -63,59 +66,131 @@ defmodule EspacoNeuroWeb.SiteComponents do
   end
 
   attr :professional, :map, required: true
+  attr :preview, :boolean, default: false
+  attr :photo_entry, :any, default: nil
 
   def professional_card(assigns) do
+    element_suffix = if assigns.preview, do: "preview", else: assigns.professional.id
+
+    assigns =
+      assigns
+      |> assign(:element_suffix, element_suffix)
+      |> assign(:card_text, assigns.professional.headline || "")
+      |> assign(:card_description, professional_card_description(assigns.professional))
+      |> assign(
+        :specialties_preview,
+        tag_preview(assigns.professional.specialties, @specialties_character_budget)
+      )
+      |> assign(
+        :modalities_preview,
+        tag_preview(assigns.professional.modalities, @modalities_character_budget)
+      )
+
     ~H"""
-    <article class="pro-card" data-cat={@professional.category}>
+    <article
+      id={"professional-card-#{@element_suffix}"}
+      class={["pro-card", @preview && "pro-card-preview"]}
+      data-cat={@professional.category}
+      data-preview={to_string(@preview)}
+    >
+      <a
+        :if={!@preview}
+        id={"professional-card-link-#{@element_suffix}"}
+        href={~p"/equipe/#{@professional.slug}"}
+        class="pro-card-link"
+        aria-label={"Ver perfil de #{@professional.name}"}
+      >
+        <span class="sr-only">Ver perfil de {@professional.name}</span>
+      </a>
       <div class="pro-photo-wrap">
+        <.live_img_preview
+          :if={@photo_entry}
+          id={"professional-card-photo-preview-#{@element_suffix}"}
+          entry={@photo_entry}
+          alt={"Prévia da foto de #{@professional.name}"}
+          class="pro-photo"
+        />
         <img
-          :if={@professional.photo_path}
+          :if={!@photo_entry && @professional.photo_path}
           src={@professional.photo_path}
           alt={@professional.name}
           class="pro-photo"
         />
-        <div :if={!@professional.photo_path} class="pro-photo pro-photo-placeholder"></div>
+        <div
+          :if={!@photo_entry && !@professional.photo_path}
+          class="pro-photo pro-photo-placeholder"
+        >
+          <.icon name="hero-user" class="size-12" />
+        </div>
         <span class="pro-prof">{@professional.profession}</span>
       </div>
       <div class="pro-body">
         <h3 class="pro-name">{@professional.name}</h3>
         <span :if={@professional.crp} class="pro-crp">{@professional.crp}</span>
-        <div class="pro-title">{@professional.headline}</div>
-        <p class="pro-desc">
-          {@professional.summary || String.slice(@professional.description, 0, 150) <> "..."}
-        </p>
-        <div :if={@professional.specialties != []} class="pro-label">Especializações</div>
-        <div :if={@professional.specialties != []} class="spec-list">
-          <span :for={spec <- @professional.specialties || []} class="spec">{spec}</span>
+        <div
+          id={"professional-card-text-#{@element_suffix}"}
+          class="pro-title"
+          data-base-lines="1"
+          data-fit-status-target={@preview && "professional-card-text-fit-status"}
+        >
+          {@card_text}
         </div>
-        <div class="pro-foot">
-          <span :for={mod <- @professional.modalities || []} class="attend">{mod}</span>
+        <p
+          id={"professional-card-summary-#{@element_suffix}"}
+          class="pro-desc"
+          data-base-lines="4"
+        >
+          {@card_description}
+        </p>
+        <div :if={@specialties_preview.visible != []} class="pro-specialties">
+          <div class="pro-label">Especializações</div>
+          <div id={"professional-specialties-#{@element_suffix}"} class="spec-list">
+            <span
+              :for={spec <- @specialties_preview.visible}
+              class="spec"
+              title={spec}
+            >
+              {spec}
+            </span>
+            <span
+              :if={@specialties_preview.hidden_count > 0}
+              class="spec spec-more"
+              data-hidden-count={@specialties_preview.hidden_count}
+              title={"#{@specialties_preview.hidden_count} especialidades adicionais"}
+              aria-label={"E mais #{@specialties_preview.hidden_count} especialidades"}
+            >
+              E mais
+            </span>
+          </div>
+        </div>
+        <div id={"professional-modalities-#{@element_suffix}"} class="pro-foot">
+          <span
+            :for={mod <- @modalities_preview.visible}
+            class="attend"
+            title={mod}
+          >
+            {mod}
+          </span>
         </div>
         <div class="pro-actions">
           <a
-            :if={@professional.whatsapp}
+            :if={@professional.whatsapp && !@preview}
             href={"https://wa.me/#{@professional.whatsapp}"}
             class="btn btn-primary btn-sm"
             target="_blank"
           >
             WhatsApp
           </a>
-          <a href={~p"/equipe/#{@professional.slug}"} class="more">
-            Saiba mais
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2.5"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <line x1="5" y1="12" x2="19" y2="12"></line>
-              <polyline points="12 5 19 12 12 19"></polyline>
-            </svg>
-          </a>
+          <span
+            :if={@professional.whatsapp && @preview}
+            class="btn btn-primary btn-sm"
+            aria-hidden="true"
+          >
+            WhatsApp
+          </span>
+          <span class="more" aria-hidden="true">
+            Saiba mais <.icon name="hero-arrow-right" class="size-4" />
+          </span>
         </div>
       </div>
     </article>
@@ -130,9 +205,10 @@ defmodule EspacoNeuroWeb.SiteComponents do
       <div class="wrap nav-inner">
         <a href={~p"/"} class="nav-brand">
           <img
-            src={~p"/images/logo-wordmark.png"}
+            id="site-header-logo"
+            src={~p"/images/logo-light.png"}
             alt="Espaço Neuro"
-            style="height:52px;width:auto;"
+            class="site-logo site-logo-header"
           />
         </a>
         <nav class="nav-links">
@@ -172,9 +248,10 @@ defmodule EspacoNeuroWeb.SiteComponents do
         <div class="footer-grid">
           <div>
             <img
-              src={~p"/images/logo-wordmark.png"}
+              id="site-footer-logo"
+              src={~p"/images/logo-light.png"}
               alt="Espaço Neuro"
-              style="height:42px;width:auto;margin-bottom:18px;"
+              class="site-logo site-logo-footer"
             />
             <p>
               Clínica de neuropsicologia, psicologia e neuropsicopedagogia. Cuidado humano e baseado em evidências para todas as idades.
@@ -265,4 +342,68 @@ defmodule EspacoNeuroWeb.SiteComponents do
   end
 
   defp format_cents(_), do: "—"
+
+  defp professional_card_description(professional) do
+    case professional.summary do
+      summary when is_binary(summary) and summary != "" -> summary
+      _ -> professional.description || ""
+    end
+  end
+
+  defp tag_preview(tags, character_budget) do
+    tags =
+      tags
+      |> List.wrap()
+      |> Enum.filter(&(is_binary(&1) and String.trim(&1) != ""))
+
+    {visible, used_characters} =
+      Enum.reduce_while(tags, {[], 0}, fn tag, {visible, used_characters} ->
+        tag_cost = tag_character_cost(tag)
+
+        if used_characters + tag_cost <= character_budget do
+          {:cont, {[tag | visible], used_characters + tag_cost}}
+        else
+          {:halt, {visible, used_characters}}
+        end
+      end)
+
+    visible =
+      case {Enum.reverse(visible), tags} do
+        {[], [first | _]} -> [first]
+        {visible, _tags} -> visible
+      end
+
+    hidden_count = length(tags) - length(visible)
+
+    {visible, hidden_count} =
+      reserve_more_tag_space(visible, used_characters, hidden_count, character_budget)
+
+    %{visible: visible, hidden_count: hidden_count}
+  end
+
+  defp reserve_more_tag_space(visible, _used_characters, 0, _character_budget),
+    do: {visible, 0}
+
+  defp reserve_more_tag_space(
+         visible,
+         used_characters,
+         hidden_count,
+         character_budget
+       )
+       when used_characters + @more_tag_cost <= character_budget or visible == [] do
+    {visible, hidden_count}
+  end
+
+  defp reserve_more_tag_space(visible, used_characters, hidden_count, character_budget) do
+    [last_visible | remaining_reversed] = Enum.reverse(visible)
+
+    reserve_more_tag_space(
+      Enum.reverse(remaining_reversed),
+      used_characters - tag_character_cost(last_visible),
+      hidden_count + 1,
+      character_budget
+    )
+  end
+
+  defp tag_character_cost(tag), do: String.length(tag) + 2
 end

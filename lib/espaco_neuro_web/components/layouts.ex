@@ -31,6 +31,8 @@ defmodule EspacoNeuroWeb.Layouts do
     default: nil,
     doc: "the current [scope](https://hexdocs.pm/phoenix/scopes.html)"
 
+  attr :wide, :boolean, default: false, doc: "expands the main content area"
+
   slot :inner_block, required: true
 
   def app(assigns) do
@@ -38,7 +40,13 @@ defmodule EspacoNeuroWeb.Layouts do
     <header class="admin-nav">
       <div class="admin-nav-top">
         <div class="admin-nav-brand">
-          <a href={~p"/admin"} class="admin-logo">Espaço Neuro</a>
+          <a href={~p"/admin"} class="admin-logo" aria-label="Espaço Neuro">
+            <img
+              id="admin-header-logo"
+              src={~p"/images/logo-light.png"}
+              alt="Espaço Neuro"
+            />
+          </a>
           <span class="admin-badge">Admin</span>
         </div>
         <nav class="admin-nav-links">
@@ -66,7 +74,7 @@ defmodule EspacoNeuroWeb.Layouts do
       </nav>
     </header>
 
-    <main class="admin-main">
+    <main class={["admin-main", @wide && "admin-main-wide"]}>
       {render_slot(@inner_block)}
     </main>
 

@@ -143,6 +143,37 @@ defmodule EspacoNeuro.CatalogTest do
       assert professional.crp == nil
     end
 
+    test "create_professional/1 accepts a summary longer than 255 characters" do
+      long_summary = String.duplicate("Resumo profissional detalhado. ", 12)
+
+      valid_attrs = %{
+        name: "Dra. Helena Marques",
+        category: :neuro,
+        profession: "Neuropsicóloga",
+        headline: "Avaliação e reabilitação cognitiva",
+        summary: long_summary,
+        description: "Bio completa"
+      }
+
+      assert {:ok, %Professional{} = professional} = Catalog.create_professional(valid_attrs)
+      assert professional.summary == long_summary
+    end
+
+    test "create_professional/1 accepts a headline longer than 255 characters" do
+      long_headline = String.duplicate("Texto completo do card. ", 12)
+
+      valid_attrs = %{
+        name: "Dra. Helena Marques",
+        category: :neuro,
+        profession: "Neuropsicóloga",
+        headline: long_headline,
+        description: "Bio completa"
+      }
+
+      assert {:ok, %Professional{} = professional} = Catalog.create_professional(valid_attrs)
+      assert professional.headline == long_headline
+    end
+
     test "create_professional/1 with invalid data returns error changeset" do
       assert {:error, %Ecto.Changeset{}} = Catalog.create_professional(@invalid_attrs)
     end

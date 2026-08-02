@@ -12,7 +12,8 @@ defmodule EspacoNeuroWeb.EquipeLive.Show do
     {:ok,
      socket
      |> assign(:page_title, professional.name)
-     |> assign(:professional, professional)}
+     |> assign(:professional, professional)
+     |> assign(:description_paragraphs, description_paragraphs(professional.description))}
   end
 
   @impl true
@@ -43,28 +44,42 @@ defmodule EspacoNeuroWeb.EquipeLive.Show do
       </div>
     </section>
 
-    <section class="section">
-      <div class="wrap detail-content">
-        <div class="detail-body">
-          <p>{@professional.description}</p>
-
-          <div :if={@professional.approach} class="detail-meta">
-            <h3>Abordagem</h3>
-            <p>{@professional.approach}</p>
-          </div>
-
-          <div :if={@professional.specialties != []} class="detail-meta">
-            <h3>Especialidades</h3>
-            <div class="spec-list">
-              <span :for={spec <- @professional.specialties || []} class="spec">{spec}</span>
+    <section class="section professional-profile-section">
+      <div class="wrap professional-profile-shell">
+        <article id="professional-profile-card" class="professional-profile-card">
+          <div id="professional-biography" class="professional-profile-intro">
+            <span class="professional-profile-kicker">Conheça a profissional</span>
+            <h2>Sobre {@professional.name}</h2>
+            <div class="professional-profile-copy">
+              <p :for={paragraph <- @description_paragraphs}>{paragraph}</p>
             </div>
           </div>
 
-          <div :if={@professional.modalities != []} class="detail-meta">
-            <h3>Modalidades de atendimento</h3>
-            <div class="pro-foot">
-              <span :for={mod <- @professional.modalities || []} class="attend">{mod}</span>
-            </div>
+          <div class="professional-profile-meta-grid">
+            <section :if={@professional.approach} class="professional-profile-meta-card">
+              <h3>Abordagem</h3>
+              <p>{@professional.approach}</p>
+            </section>
+
+            <section
+              :if={@professional.modalities != []}
+              class="professional-profile-meta-card"
+            >
+              <h3>Modalidades de atendimento</h3>
+              <div class="pro-foot">
+                <span :for={mod <- @professional.modalities || []} class="attend">{mod}</span>
+              </div>
+            </section>
+
+            <section
+              :if={@professional.specialties != []}
+              class="professional-profile-meta-card professional-profile-meta-card-wide"
+            >
+              <h3>Especialidades</h3>
+              <div class="spec-list">
+                <span :for={spec <- @professional.specialties || []} class="spec">{spec}</span>
+              </div>
+            </section>
           </div>
 
           <div class="detail-contact">
@@ -84,7 +99,7 @@ defmodule EspacoNeuroWeb.EquipeLive.Show do
               Enviar e-mail
             </a>
           </div>
-        </div>
+        </article>
       </div>
     </section>
 
@@ -102,5 +117,12 @@ defmodule EspacoNeuroWeb.EquipeLive.Show do
     <.cta_section />
     <.site_footer />
     """
+  end
+
+  defp description_paragraphs(description) do
+    description
+    |> String.split(~r/\R{2,}/)
+    |> Enum.map(&String.trim/1)
+    |> Enum.reject(&(&1 == ""))
   end
 end

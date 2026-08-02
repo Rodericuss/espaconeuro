@@ -111,7 +111,12 @@ defmodule EspacoNeuroWeb.EquipeLive.Index do
 
     <section class="section">
       <div class="wrap">
-        <div class="team-grid" id="team-grid" phx-update="stream">
+        <div
+          class="team-grid"
+          id="team-grid"
+          phx-update="stream"
+          phx-hook="ProfessionalCardTextFit"
+        >
           <div :for={{dom_id, pro} <- @streams.professionals} id={dom_id}>
             <.professional_card professional={pro} />
           </div>

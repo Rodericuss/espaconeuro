@@ -54,7 +54,11 @@ defmodule EspacoNeuroWeb.ServicoLive.Show do
         <div class="section-head">
           <h2>Profissionais deste serviço</h2>
         </div>
-        <div class="team-grid">
+        <div
+          class="team-grid"
+          id={"service-professionals-grid-#{@service.id}"}
+          phx-hook="ProfessionalCardTextFit"
+        >
           <.professional_card :for={pro <- @service.professionals} professional={pro} />
         </div>
       </div>

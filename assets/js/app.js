@@ -46,11 +46,239 @@ Uploaders.S3 = function(entries, onViewError) {
   })
 }
 
+const ProfessionalCardTextFit = {
+  mounted() {
+    this.fitFrame = null
+    this.measureFrame = null
+    this.scheduleFit = () => {
+      if (this.fitFrame) cancelAnimationFrame(this.fitFrame)
+      if (this.measureFrame) cancelAnimationFrame(this.measureFrame)
+
+      this.fitFrame = requestAnimationFrame(() => this.resetAndFitCards())
+    }
+
+    this.resizeObserver = new ResizeObserver(this.scheduleFit)
+    this.resizeObserver.observe(this.el)
+    document.fonts?.ready.then(this.scheduleFit)
+    this.scheduleFit()
+  },
+
+  updated() {
+    this.scheduleFit()
+  },
+
+  destroyed() {
+    this.resizeObserver.disconnect()
+    if (this.fitFrame) cancelAnimationFrame(this.fitFrame)
+    if (this.measureFrame) cancelAnimationFrame(this.measureFrame)
+  },
+
+  resetAndFitCards() {
+    const cards = [...this.el.querySelectorAll(".pro-card")]
+
+    cards.forEach(card => {
+      const title = card.querySelector(".pro-title")
+      const description = card.querySelector(".pro-desc")
+
+      if (title) {
+        const baseLines = Number(title.dataset.baseLines) || 1
+        title.style.setProperty("--card-title-lines", baseLines)
+        delete title.dataset.visibleCharacters
+        delete title.dataset.visibleLines
+      }
+
+      if (!description) return
+
+      const baseLines = Number(description.dataset.baseLines) || 4
+      description.style.setProperty("--card-description-lines", baseLines)
+      delete description.dataset.visibleLines
+    })
+
+    this.measureFrame = requestAnimationFrame(() => {
+      cards.forEach(card => this.fitCard(card))
+    })
+  },
+
+  fitCard(card) {
+    const title = card.querySelector(".pro-title")
+    const description = card.querySelector(".pro-desc")
+    const modalities = card.querySelector(".pro-foot")
+
+    if (!title || !description || !modalities) return
+
+    const titleLineHeight = Number.parseFloat(getComputedStyle(title).lineHeight)
+    const descriptionLineHeight = Number.parseFloat(getComputedStyle(description).lineHeight)
+
+    if (
+      !Number.isFinite(titleLineHeight) ||
+      titleLineHeight <= 0 ||
+      !Number.isFinite(descriptionLineHeight) ||
+      descriptionLineHeight <= 0
+    ) return
+
+    const titleBaseLines = Number(title.dataset.baseLines) || 1
+    const fullTitleLines = this.measureFullLineCount(title, titleLineHeight)
+    const hiddenTitleLines = Math.max(0, fullTitleLines - titleBaseLines)
+    const titleExtraLines = Math.min(
+      hiddenTitleLines,
+      Math.floor(Math.max(0, this.availableTextHeight(card, description) - 2) / titleLineHeight)
+    )
+    const visibleTitleLines = Math.min(fullTitleLines, titleBaseLines + titleExtraLines)
+
+    title.style.setProperty("--card-title-lines", visibleTitleLines)
+    title.dataset.visibleLines = visibleTitleLines
+
+    const totalCharacters = Array.from(title.textContent.trim()).length
+    const visibleCharacters = this.measureVisibleCharacterCount(
+      title,
+      visibleTitleLines,
+      titleLineHeight,
+      fullTitleLines
+    )
+
+    title.dataset.visibleCharacters = visibleCharacters
+    this.updateFitStatus(title, visibleCharacters, totalCharacters)
+
+    const baseLines = Number(description.dataset.baseLines) || 4
+    const fullLines = this.measureFullLineCount(description, descriptionLineHeight)
+    const hiddenLines = Math.max(0, fullLines - baseLines)
+    const extraLines = Math.min(
+      hiddenLines,
+      Math.floor(
+        Math.max(0, this.availableTextHeight(card, description) - 2) / descriptionLineHeight
+      )
+    )
+    const visibleLines = baseLines + extraLines
+
+    description.style.setProperty("--card-description-lines", visibleLines)
+    description.dataset.visibleLines = visibleLines
+  },
+
+  availableTextHeight(card, description) {
+    const modalities = card.querySelector(".pro-foot")
+    const specialties = card.querySelector(".pro-specialties")
+    const contentBeforeModalities = specialties || description
+
+    return (
+      modalities.getBoundingClientRect().top -
+      contentBeforeModalities.getBoundingClientRect().bottom
+    )
+  },
+
+  measureFullLineCount(element, lineHeight) {
+    const measurement = this.createMeasurement(element)
+
+    if (!measurement) return 1
+
+    const fullHeight = measurement.getBoundingClientRect().height
+    measurement.remove()
+
+    return Math.max(1, Math.ceil((fullHeight - 0.5) / lineHeight))
+  },
+
+  measureVisibleCharacterCount(element, visibleLines, lineHeight, fullLines) {
+    const characters = Array.from(element.textContent.trim())
+
+    if (fullLines <= visibleLines) return characters.length
+
+    const measurement = this.createMeasurement(element)
+
+    if (!measurement) return characters.length
+
+    const maximumHeight = visibleLines * lineHeight + 0.5
+    let lowerBound = 0
+    let upperBound = characters.length
+
+    while (lowerBound < upperBound) {
+      const middle = Math.ceil((lowerBound + upperBound) / 2)
+      const candidate = characters.slice(0, middle).join("").trimEnd()
+      measurement.textContent = `${candidate}…`
+
+      if (measurement.getBoundingClientRect().height <= maximumHeight) {
+        lowerBound = middle
+      } else {
+        upperBound = middle - 1
+      }
+    }
+
+    measurement.remove()
+    return lowerBound
+  },
+
+  createMeasurement(element) {
+    const width = element.getBoundingClientRect().width
+
+    if (width <= 0) return null
+
+    const measurement = element.cloneNode(true)
+
+    measurement.removeAttribute("id")
+    measurement.removeAttribute("data-visible-lines")
+    measurement.removeAttribute("data-visible-characters")
+    Object.assign(measurement.style, {
+      position: "fixed",
+      inset: "0 auto auto -10000px",
+      width: `${width}px`,
+      height: "auto",
+      maxHeight: "none",
+      margin: "0",
+      display: "block",
+      overflow: "visible",
+      visibility: "hidden",
+      pointerEvents: "none",
+      webkitLineClamp: "unset",
+      lineClamp: "unset",
+      webkitBoxOrient: "unset",
+    })
+
+    document.body.appendChild(measurement)
+    return measurement
+  },
+
+  updateFitStatus(title, visibleCharacters, totalCharacters) {
+    const targetId = title.dataset.fitStatusTarget
+
+    if (!targetId) return
+
+    const status = document.getElementById(targetId)
+
+    if (!status) return
+
+    status.textContent = visibleCharacters >= totalCharacters
+      ? "Todo o texto está visível na prévia."
+      : `Na prévia, ${visibleCharacters} de ${totalCharacters} caracteres estão visíveis.`
+  },
+}
+
+const LiveCharacterCounter = {
+  mounted() {
+    this.updateCharacterCount = () => {
+      const counter = document.getElementById(this.el.dataset.counterTarget)
+      const characterCount = Array.from(this.el.value).length
+
+      if (counter) {
+        counter.textContent = characterCount
+      }
+    }
+
+    this.el.addEventListener("input", this.updateCharacterCount)
+    this.updateCharacterCount()
+  },
+
+  updated() {
+    this.updateCharacterCount()
+  },
+
+  destroyed() {
+    this.el.removeEventListener("input", this.updateCharacterCount)
+  },
+}
+
 const csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 const liveSocket = new LiveSocket("/live", Socket, {
   longPollFallbackMs: 2500,
   params: {_csrf_token: csrfToken},
-  hooks: {...colocatedHooks},
+  hooks: {...colocatedHooks, ProfessionalCardTextFit, LiveCharacterCounter},
   uploaders: Uploaders,
 })
 
@@ -102,4 +330,3 @@ if (process.env.NODE_ENV === "development") {
     window.liveReloader = reloader
   })
 }
-
