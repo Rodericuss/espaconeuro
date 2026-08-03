@@ -139,29 +139,15 @@ defmodule EspacoNeuroWeb.Admin.ProfessionalLive.FormTest do
     end
   end
 
-  test "shows the card text counter without limiting what can be entered", %{conn: conn} do
+  test "keeps the complete subtitle in the form and preview without a character counter", %{
+    conn: conn
+  } do
     {:ok, view, _html} = live(conn, ~p"/admin/profissionais/new")
 
     assert has_element?(view, "label[for='professional_headline']", "Subtítulo do card *")
-
-    assert has_element?(
-             view,
-             "#professional_headline[aria-describedby='professional-card-text-counter']" <>
-               "[phx-hook='LiveCharacterCounter']" <>
-               "[data-counter-target='professional-card-text-character-count']"
-           )
-
-    refute has_element?(view, "#professional_headline[data-character-limit]")
     refute has_element?(view, "#professional_headline[maxlength]")
-    refute has_element?(view, "#professional_summary[aria-describedby]")
-    assert has_element?(view, "#professional-card-text-counter", "0 caracteres digitados")
-    assert has_element?(view, "#professional-card-text-character-count", "0")
-
-    assert has_element?(
-             view,
-             "#professional-card-text-preview" <>
-               "[data-fit-status-target='professional-card-text-fit-status']"
-           )
+    refute has_element?(view, "#professional-card-text-counter")
+    refute has_element?(view, "#professional-card-text-fit-status")
 
     long_card_text = String.duplicate("á", 180)
 
@@ -169,23 +155,17 @@ defmodule EspacoNeuroWeb.Admin.ProfessionalLive.FormTest do
     |> form("#professional-form", professional: %{headline: long_card_text})
     |> render_change()
 
-    assert has_element?(view, "#professional-card-text-counter", "180 caracteres digitados")
     assert has_element?(view, "#professional-card-text-preview", long_card_text)
     assert has_element?(view, "#professional_headline[value='#{long_card_text}']")
   end
 
-  test "counts an existing long card text when editing", %{conn: conn} do
+  test "keeps an existing long subtitle unrestricted when editing", %{conn: conn} do
     card_text = String.duplicate("Texto longo. ", 30)
     professional = professional_fixture(%{headline: card_text})
 
     {:ok, view, _html} = live(conn, ~p"/admin/profissionais/#{professional}/edit")
 
-    assert has_element?(
-             view,
-             "#professional-card-text-counter",
-             "#{String.length(card_text)} caracteres digitados"
-           )
-
+    assert has_element?(view, "#professional_headline[value='#{card_text}']")
     refute has_element?(view, "#professional_headline[maxlength]")
   end
 end

@@ -83,7 +83,6 @@ const ProfessionalCardTextFit = {
       if (title) {
         const baseLines = Number(title.dataset.baseLines) || 1
         title.style.setProperty("--card-title-lines", baseLines)
-        delete title.dataset.visibleCharacters
         delete title.dataset.visibleLines
       }
 
@@ -128,17 +127,6 @@ const ProfessionalCardTextFit = {
     title.style.setProperty("--card-title-lines", visibleTitleLines)
     title.dataset.visibleLines = visibleTitleLines
 
-    const totalCharacters = Array.from(title.textContent.trim()).length
-    const visibleCharacters = this.measureVisibleCharacterCount(
-      title,
-      visibleTitleLines,
-      titleLineHeight,
-      fullTitleLines
-    )
-
-    title.dataset.visibleCharacters = visibleCharacters
-    this.updateFitStatus(title, visibleCharacters, totalCharacters)
-
     const baseLines = Number(description.dataset.baseLines) || 4
     const fullLines = this.measureFullLineCount(description, descriptionLineHeight)
     const hiddenLines = Math.max(0, fullLines - baseLines)
@@ -176,35 +164,6 @@ const ProfessionalCardTextFit = {
     return Math.max(1, Math.ceil((fullHeight - 0.5) / lineHeight))
   },
 
-  measureVisibleCharacterCount(element, visibleLines, lineHeight, fullLines) {
-    const characters = Array.from(element.textContent.trim())
-
-    if (fullLines <= visibleLines) return characters.length
-
-    const measurement = this.createMeasurement(element)
-
-    if (!measurement) return characters.length
-
-    const maximumHeight = visibleLines * lineHeight + 0.5
-    let lowerBound = 0
-    let upperBound = characters.length
-
-    while (lowerBound < upperBound) {
-      const middle = Math.ceil((lowerBound + upperBound) / 2)
-      const candidate = characters.slice(0, middle).join("").trimEnd()
-      measurement.textContent = `${candidate}…`
-
-      if (measurement.getBoundingClientRect().height <= maximumHeight) {
-        lowerBound = middle
-      } else {
-        upperBound = middle - 1
-      }
-    }
-
-    measurement.remove()
-    return lowerBound
-  },
-
   createMeasurement(element) {
     const width = element.getBoundingClientRect().width
 
@@ -234,51 +193,13 @@ const ProfessionalCardTextFit = {
     document.body.appendChild(measurement)
     return measurement
   },
-
-  updateFitStatus(title, visibleCharacters, totalCharacters) {
-    const targetId = title.dataset.fitStatusTarget
-
-    if (!targetId) return
-
-    const status = document.getElementById(targetId)
-
-    if (!status) return
-
-    status.textContent = visibleCharacters >= totalCharacters
-      ? "Todo o texto está visível na prévia."
-      : `Na prévia, ${visibleCharacters} de ${totalCharacters} caracteres estão visíveis.`
-  },
-}
-
-const LiveCharacterCounter = {
-  mounted() {
-    this.updateCharacterCount = () => {
-      const counter = document.getElementById(this.el.dataset.counterTarget)
-      const characterCount = Array.from(this.el.value).length
-
-      if (counter) {
-        counter.textContent = characterCount
-      }
-    }
-
-    this.el.addEventListener("input", this.updateCharacterCount)
-    this.updateCharacterCount()
-  },
-
-  updated() {
-    this.updateCharacterCount()
-  },
-
-  destroyed() {
-    this.el.removeEventListener("input", this.updateCharacterCount)
-  },
 }
 
 const csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 const liveSocket = new LiveSocket("/live", Socket, {
   longPollFallbackMs: 2500,
   params: {_csrf_token: csrfToken},
-  hooks: {...colocatedHooks, ProfessionalCardTextFit, LiveCharacterCounter},
+  hooks: {...colocatedHooks, ProfessionalCardTextFit},
   uploaders: Uploaders,
 })
 

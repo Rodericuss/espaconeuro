@@ -34,32 +34,12 @@ defmodule EspacoNeuroWeb.Admin.ProfessionalLive.Form do
             />
             <.input field={@form[:profession]} type="text" label="Profissão (pill) *" required />
             <.input field={@form[:crp]} type="text" label="Registro (CRP/CRFa)" />
-            <div id="professional-card-text-field">
-              <.input
-                field={@form[:headline]}
-                type="text"
-                label="Subtítulo do card *"
-                aria-describedby="professional-card-text-counter"
-                data-counter-target="professional-card-text-character-count"
-                phx-hook="LiveCharacterCounter"
-                phx-debounce="150"
-                required
-              />
-              <p
-                id="professional-card-text-counter"
-                class="mb-3 mt-1 text-sm text-slate-600"
-                role="status"
-                aria-live="polite"
-              >
-                <strong id="professional-card-text-character-count">
-                  {@card_text_character_count}
-                </strong>
-                caracteres digitados.
-                <span id="professional-card-text-fit-status">
-                  A prévia ao lado calcula quanto do texto cabe no card.
-                </span>
-              </p>
-            </div>
+            <.input
+              field={@form[:headline]}
+              type="text"
+              label="Subtítulo do card *"
+              required
+            />
             <.input field={@form[:summary]} type="text" label="Descrição curta do card" />
             <.input
               field={@form[:description]}
@@ -248,7 +228,6 @@ defmodule EspacoNeuroWeb.Admin.ProfessionalLive.Form do
     |> assign(:professional, professional)
     |> assign(:specialties_input, Enum.join(professional.specialties || [], ", "))
     |> assign(:modalities_input, Enum.join(professional.modalities || [], ", "))
-    |> assign_card_text_counter(professional.headline)
     |> assign_preview(changeset)
     |> assign(:form, to_form(changeset))
   end
@@ -262,7 +241,6 @@ defmodule EspacoNeuroWeb.Admin.ProfessionalLive.Form do
     |> assign(:professional, professional)
     |> assign(:specialties_input, "")
     |> assign(:modalities_input, "")
-    |> assign_card_text_counter(nil)
     |> assign_preview(changeset)
     |> assign(:form, to_form(changeset))
   end
@@ -274,7 +252,6 @@ defmodule EspacoNeuroWeb.Admin.ProfessionalLive.Form do
 
     {:noreply,
      socket
-     |> assign_card_text_counter(params["headline"])
      |> assign_preview(changeset)
      |> assign(:form, to_form(changeset, action: :validate))}
   end
@@ -307,7 +284,6 @@ defmodule EspacoNeuroWeb.Admin.ProfessionalLive.Form do
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply,
          socket
-         |> assign_card_text_counter(params["headline"])
          |> assign_preview(changeset)
          |> assign(:form, to_form(changeset))}
     end
@@ -324,7 +300,6 @@ defmodule EspacoNeuroWeb.Admin.ProfessionalLive.Form do
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply,
          socket
-         |> assign_card_text_counter(params["headline"])
          |> assign_preview(changeset)
          |> assign(:form, to_form(changeset))}
     end
@@ -353,13 +328,6 @@ defmodule EspacoNeuroWeb.Admin.ProfessionalLive.Form do
   defp split_comma_field(str) do
     str |> String.split(",") |> Enum.map(&String.trim/1) |> Enum.reject(&(&1 == ""))
   end
-
-  defp assign_card_text_counter(socket, card_text) do
-    assign(socket, :card_text_character_count, character_count(card_text))
-  end
-
-  defp character_count(text) when is_binary(text), do: String.length(text)
-  defp character_count(_text), do: 0
 
   defp assign_preview(socket, changeset) do
     professional =

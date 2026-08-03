@@ -131,7 +131,6 @@ defmodule EspacoNeuroWeb.SiteComponents do
           id={"professional-card-text-#{@element_suffix}"}
           class="pro-title"
           data-base-lines="1"
-          data-fit-status-target={@preview && "professional-card-text-fit-status"}
         >
           {@card_text}
         </div>
