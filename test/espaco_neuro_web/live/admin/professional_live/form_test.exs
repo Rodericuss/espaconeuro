@@ -142,6 +142,8 @@ defmodule EspacoNeuroWeb.Admin.ProfessionalLive.FormTest do
   test "shows the card text counter without limiting what can be entered", %{conn: conn} do
     {:ok, view, _html} = live(conn, ~p"/admin/profissionais/new")
 
+    assert has_element?(view, "label[for='professional_headline']", "Subtítulo do card *")
+
     assert has_element?(
              view,
              "#professional_headline[aria-describedby='professional-card-text-counter']" <>

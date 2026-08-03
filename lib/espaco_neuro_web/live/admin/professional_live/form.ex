@@ -38,7 +38,7 @@ defmodule EspacoNeuroWeb.Admin.ProfessionalLive.Form do
               <.input
                 field={@form[:headline]}
                 type="text"
-                label="Texto do card (subtítulo teal) *"
+                label="Subtítulo do card *"
                 aria-describedby="professional-card-text-counter"
                 data-counter-target="professional-card-text-character-count"
                 phx-hook="LiveCharacterCounter"

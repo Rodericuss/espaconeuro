@@ -24,6 +24,8 @@ config :espaco_neuro,
   ecto_repos: [EspacoNeuro.Repo],
   generators: [timestamp_type: :utc_datetime]
 
+config :ex_aws, http_client: ExAws.Request.Req
+
 # Configure the endpoint
 config :espaco_neuro, EspacoNeuroWeb.Endpoint,
   url: [host: "localhost"],

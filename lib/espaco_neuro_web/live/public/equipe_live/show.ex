@@ -38,7 +38,9 @@ defmodule EspacoNeuroWeb.EquipeLive.Show do
             <span class="pro-prof">{@professional.profession}</span>
             <h1>{@professional.name}</h1>
             <span :if={@professional.crp} class="pro-crp">{@professional.crp}</span>
-            <div class="pro-title">{@professional.headline}</div>
+            <p id="professional-profile-headline" class="professional-profile-headline">
+              {@professional.headline}
+            </p>
           </div>
         </div>
       </div>

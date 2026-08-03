@@ -16,4 +16,21 @@ defmodule EspacoNeuroWeb.EquipeLive.ShowTest do
     assert has_element?(view, "#professional-biography p + p")
     assert has_element?(view, ".professional-profile-meta-grid")
   end
+
+  test "renders the complete headline without the card clamping class", %{conn: conn} do
+    complete_headline =
+      "Subtítulo completo da profissional. "
+      |> String.duplicate(12)
+      |> String.trim()
+
+    professional = professional_fixture(%{headline: complete_headline})
+
+    {:ok, view, _html} = live(conn, ~p"/equipe/#{professional.slug}")
+
+    assert has_element?(
+             view,
+             "#professional-profile-headline.professional-profile-headline:not(.pro-title)",
+             complete_headline
+           )
+  end
 end
