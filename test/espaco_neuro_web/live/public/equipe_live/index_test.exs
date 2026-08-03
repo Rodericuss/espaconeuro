@@ -24,7 +24,7 @@ defmodule EspacoNeuroWeb.EquipeLive.IndexTest do
 
     assert has_element?(
              view,
-             "#professional-card-text-#{professional.id}[data-base-lines='1']",
+             "#professional-card-text-#{professional.id}[data-base-lines='2']",
              complete_text
            )
   end

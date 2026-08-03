@@ -1513,7 +1513,7 @@ h4 {
   display: flex;
   flex-direction: column;
   height: 100%;
-  min-height: 720px;
+  min-height: 745px;
   width: 100%;
   position: relative;
   transition: transform .22s var(--ease), box-shadow .22s, border-color .22s;
@@ -1583,7 +1583,7 @@ h4 {
 }
 
 .pro-title {
-  --card-title-lines: 1;
+  --card-title-lines: 2;
   font-family: var(--font-display);
   font-weight: 500;
   font-size: 15.5px;

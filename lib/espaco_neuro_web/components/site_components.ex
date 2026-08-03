@@ -130,7 +130,7 @@ defmodule EspacoNeuroWeb.SiteComponents do
         <div
           id={"professional-card-text-#{@element_suffix}"}
           class="pro-title"
-          data-base-lines="1"
+          data-base-lines="2"
         >
           {@card_text}
         </div>
